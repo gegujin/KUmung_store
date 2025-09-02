@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kumeong_store/features/auth/login_screen.dart';
 
 // Screens
 import '../features/home/home_screen.dart';
@@ -95,14 +96,15 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/',
       name: 'home',
-      builder: (_, __) => const HomeScreen(),
+      builder: (_, __) => const LoginPage(),
     ),
     GoRoute(
       path: '/product/:productId',
       name: 'productDetail',
       builder: (context, state) {
         final productId = state.pathParameters['productId']!;
-        final extraProduct = state.extra is Product ? state.extra as Product : null;
+        final extraProduct =
+            state.extra is Product ? state.extra as Product : null;
         return ProductDetailScreen(
           productId: productId,
           initialProduct: extraProduct,
@@ -143,18 +145,19 @@ final GoRouter router = GoRouter(
         String? imageUrl;
         String? categoryTop;
 
-        int _toInt(Object? v) => (v is num) ? v.toInt() : int.tryParse('$v') ?? 0;
+        int _toInt(Object? v) =>
+            (v is num) ? v.toInt() : int.tryParse('$v') ?? 0;
 
         final x = state.extra;
         if (x is Map) {
           final m = Map<String, Object?>.from(x);
-          roomId       = (m['roomId'] as String?) ?? roomId;
-          productId    = m['productId'] as String? ?? productId;
-          partnerName  = m['partnerName'] as String?;
+          roomId = (m['roomId'] as String?) ?? roomId;
+          productId = m['productId'] as String? ?? productId;
+          partnerName = m['partnerName'] as String?;
           productTitle = m['productTitle'] as String?;
-          price        = _toInt(m['price']);
-          imageUrl     = m['imageUrl'] as String?;
-          categoryTop  = m['categoryTop'] as String?;
+          price = _toInt(m['price']);
+          imageUrl = m['imageUrl'] as String?;
+          categoryTop = m['categoryTop'] as String?;
         }
 
         return PaymentMethodScreen(
@@ -218,11 +221,11 @@ final GoRouter router = GoRouter(
         );
       },
     ),
-    
     GoRoute(
       path: '/delivery/feed',
       name: 'deliveryFeed',
-      builder: (_, __) => const KuDeliveryFeedScreen(), // ku_delivery_list_screen.dart
+      builder: (_, __) =>
+          const KuDeliveryFeedScreen(), // ku_delivery_list_screen.dart
     ),
     GoRoute(
       path: '/delivery/alerts',
@@ -245,7 +248,6 @@ final GoRouter router = GoRouter(
         return DeliveryStatusScreen(args: args);
       },
     ),
-
 
     /*
     GoRoute(

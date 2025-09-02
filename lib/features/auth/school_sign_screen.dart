@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../auth/login_screen.dart';
+import '../auth/signup_screen.dart';
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+class SchoolSignUpPage extends StatelessWidget {
+  const SchoolSignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class SignUpPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: mainColor,
         centerTitle: true,
-        title: const Text('회원가입', style: TextStyle(color: Colors.white)),
+        title: const Text('학교 인증', style: TextStyle(color: Colors.white)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
@@ -25,12 +25,27 @@ class SignUpPage extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const SizedBox(height: 40), // 상단 여백
+              const SizedBox(height: 40), // 상단 여백 추가
               Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(labelText: '아이디'),
+                      decoration: const InputDecoration(
+                        labelText: '학교 이메일 (@ 전까지)',
+                      ),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  const Text('@kku.ac.kr'),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(labelText: '인증번호 입력'),
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),
@@ -42,22 +57,11 @@ class SignUpPage extends StatelessWidget {
                     ),
                     onPressed: () {},
                     child: const Text(
-                      '중복확인',
+                      '인증번호 전송',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                decoration: const InputDecoration(labelText: '비밀번호'),
-                obscureText: true,
-                style: const TextStyle(fontSize: 16),
-              ),
-              TextField(
-                decoration: const InputDecoration(labelText: '비밀번호 확인'),
-                obscureText: true,
-                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -68,13 +72,10 @@ class SignUpPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                    MaterialPageRoute(builder: (_) => const SignUpPage()),
                   );
                 },
-                child: const Text(
-                  '회원가입',
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text('다음', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
