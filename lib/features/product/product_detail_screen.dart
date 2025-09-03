@@ -39,7 +39,6 @@
 //     // await wishApi.toggle(productId: widget.productId, liked: _liked);
 //   }
 
-
 //   @override
 //   void initState() {
 //     super.initState();
@@ -325,7 +324,6 @@
 //     }
 //   }
 
-
 //   Future<void> _onMapPressed() async {
 //     if (!mounted) return;
 //     final p = _product!;
@@ -478,7 +476,6 @@
 //   }
 // }
 
-
 // /// 전체 화면 이미지 갤러리
 // class PhotoGalleryPage extends StatefulWidget {
 //   const PhotoGalleryPage({
@@ -570,13 +567,6 @@
 //   }
 // }
 
-
-
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -610,7 +600,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   String? _error;
 
   bool _creating = false; // 채팅방 생성 중
-  bool _liked = false;    // 찜 토글 상태
+  bool _liked = false; // 찜 토글 상태
 
   void _toggleLike() {
     setState(() => _liked = !_liked);
@@ -623,7 +613,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _thumbController = PageController();
     _product = widget.initialProduct ?? demoProduct; // TODO: 연동 전 임시
-    _loadIfNeeded();                                 // TODO: 백엔드 연동 포인트
+    _loadIfNeeded(); // TODO: 백엔드 연동 포인트
   }
 
   Future<void> _loadIfNeeded() async {
@@ -632,8 +622,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   String _formatPrice(int p) =>
       '${NumberFormat.decimalPattern('ko_KR').format(p)}원';
-  String _timeAgo(DateTime dt) =>
-      timeago.format(dt, locale: 'ko');
+  String _timeAgo(DateTime dt) => timeago.format(dt, locale: 'ko');
 
   @override
   Widget build(BuildContext context) {
@@ -653,6 +642,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         backgroundColor: colors.primary,
         title: const Text('상품 상세페이지'),
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            context.pop();
+          },
+        ),
         actions: const [
           Icon(Icons.share_outlined, color: Colors.white),
           SizedBox(width: 8),
@@ -689,8 +684,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: Image.network(
                     p.imageUrls[i],
                     fit: BoxFit.contain,
-                    loadingBuilder: (_, child, prog) =>
-                        prog == null ? child : const Center(child: CircularProgressIndicator()),
+                    loadingBuilder: (_, child, prog) => prog == null
+                        ? child
+                        : const Center(child: CircularProgressIndicator()),
                     errorBuilder: (_, __, ___) =>
                         const Center(child: Icon(Icons.broken_image, size: 48)),
                   ),
@@ -936,7 +932,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         throw '위치 권한이 거부되었습니다.';
       }
     }
-    return Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 
   Future<void> _openNaverMap(
@@ -1140,10 +1137,11 @@ class _PhotoGalleryPageState extends State<PhotoGalleryPage> {
           child: Image.network(
             widget.images[i],
             fit: BoxFit.contain,
-            loadingBuilder: (_, child, prog) =>
-                prog == null ? child : const Center(child: CircularProgressIndicator()),
-            errorBuilder: (_, __, ___) =>
-                const Center(child: Icon(Icons.broken_image, color: Colors.white, size: 64)),
+            loadingBuilder: (_, child, prog) => prog == null
+                ? child
+                : const Center(child: CircularProgressIndicator()),
+            errorBuilder: (_, __, ___) => const Center(
+                child: Icon(Icons.broken_image, color: Colors.white, size: 64)),
           ),
         ),
       ),
