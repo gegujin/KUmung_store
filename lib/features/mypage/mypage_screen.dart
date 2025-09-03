@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumeong_store/features/chat/chat_list_screen.dart';
 import '../mypage/point_screen.dart';
 import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
@@ -179,11 +180,18 @@ class MyPage extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: '1:1채팅'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
         ],
+        currentIndex: 0,
         onTap: (index) {
           if (index == 0) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const HomePage()),
+            );
+          }
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ChatListScreen()),
             );
           }
         },

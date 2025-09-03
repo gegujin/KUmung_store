@@ -5,12 +5,12 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme.dart';
 
 class ChatSummary {
-  final String id;            // 채팅방 ID
-  final String partnerName;   // 거래자 이름
-  final String lastMessage;   // 마지막 메시지
-  final DateTime updatedAt;   // 마지막 갱신 시간
-  final int unreadCount;      // 안읽은 개수
-  final String? avatarUrl;    // 프로필 이미지(옵션)
+  final String id; // 채팅방 ID
+  final String partnerName; // 거래자 이름
+  final String lastMessage; // 마지막 메시지
+  final DateTime updatedAt; // 마지막 갱신 시간
+  final int unreadCount; // 안읽은 개수
+  final String? avatarUrl; // 프로필 이미지(옵션)
 
   const ChatSummary({
     required this.id,
@@ -31,7 +31,7 @@ class ChatListScreen extends StatefulWidget {
 
 class _ChatListScreenState extends State<ChatListScreen> {
   // TODO: 이후 Firebase/서버 연동으로 교체
-    List<ChatSummary> _items = [
+  List<ChatSummary> _items = [
     ChatSummary(
       id: 'room-1',
       partnerName: '거래자',
@@ -87,8 +87,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 8),
           itemCount: _items.length,
-          separatorBuilder: (_, __) =>
-              const Divider(height: 1, thickness: 0.4),
+          separatorBuilder: (_, __) => const Divider(height: 1, thickness: 0.4),
           itemBuilder: (context, index) {
             final chat = _items[index];
             return ListTile(
@@ -101,7 +100,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
               leading: _Avatar(url: chat.avatarUrl),
               title: Text(
                 chat.partnerName,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 overflow: TextOverflow.ellipsis,
               ),
               subtitle: Padding(
@@ -126,8 +126,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   const SizedBox(height: 6),
                   if (chat.unreadCount > 0)
                     Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         // 테마 색으로 바꾸고 싶으면 Theme.of(context).colorScheme.primary 사용
@@ -186,16 +186,18 @@ class _BottomNav extends StatelessWidget {
       selectedIndex: currentIndex,
       destinations: const [
         NavigationDestination(icon: Icon(Icons.home_outlined), label: '메인화면'),
-        NavigationDestination(icon: Icon(Icons.chat_bubble_outline), label: '채팅'),
-        NavigationDestination(icon: Icon(Icons.person_outline), label: '마이 페이지'),
+        NavigationDestination(
+            icon: Icon(Icons.chat_bubble_outline), label: '채팅'),
+        NavigationDestination(
+            icon: Icon(Icons.person_outline), label: '마이 페이지'),
       ],
       onDestinationSelected: (i) {
         switch (i) {
           case 0:
-            context.go('/'); // 홈
+            context.go('/home'); // 홈
             break;
           case 1:
-            // 현재 화면
+            context.go('/chat');
             break;
           case 2:
             context.go('/mypage');
