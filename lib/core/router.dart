@@ -18,7 +18,7 @@ import '../features/delivery/ku_delivery_detail_screen.dart';
 import '../features/delivery/delivery_status_screen.dart';
 //import '../features/settings/settings_screen.dart';
 //import '../features/delivery/request_delivery_screen.dart';
-//import '../features/mypage/mypage_screen.dart';
+import '../features/mypage/mypage_screen.dart';
 
 // Models
 import '../models/post.dart';
@@ -95,8 +95,13 @@ final GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      name: 'home',
+      name: 'login',
       builder: (_, __) => const LoginPage(),
+    ),
+    GoRoute(
+      path: '/home',
+      name: 'home',
+      builder: (_, __) => const HomePage(),
     ),
     GoRoute(
       path: '/product/:productId',
@@ -247,6 +252,11 @@ final GoRouter router = GoRouter(
         final args = state.extra as DeliveryStatusArgs;
         return DeliveryStatusScreen(args: args);
       },
+    ),
+    GoRoute(
+      path: '/mypage',
+      name: 'mypage',
+      builder: (_, __) => const MyPage(),
     ),
 
     /*

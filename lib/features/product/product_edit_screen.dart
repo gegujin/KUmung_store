@@ -8,8 +8,8 @@ import '../../models/post.dart';
 class ProductEditScreen extends StatefulWidget {
   const ProductEditScreen({
     super.key,
-    required this.productId,          // ✅ ID 기반
-    this.initialProduct,              // ✅ 있으면 폼 초기값으로 사용
+    required this.productId, // ✅ ID 기반
+    this.initialProduct, // ✅ 있으면 폼 초기값으로 사용
   });
 
   final String productId;
@@ -61,7 +61,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     // - 생성 시 서버가 부여한 productId로 교체 후 상세 페이지로 이동
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(widget.initialProduct != null ? '수정 완료!' : '상품이 등록되었습니다!')),
+      SnackBar(
+          content:
+              Text(widget.initialProduct != null ? '수정 완료!' : '상품이 등록되었습니다!')),
     );
 
     // ✅ 뒤로가기(pop) 대신 앞으로 이동
@@ -92,9 +94,16 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       backgroundColor: cs.background,
       appBar: AppBar(
         backgroundColor: cs.primary,
-        title: Text(isEditing ? '상품 수정' : '상품 등록', style: TextStyle(color: cs.onPrimary)),
-        // ❌ 뒤로가기 버튼 사용 안 함
+        title: Text(isEditing ? '상품 수정' : '상품 등록',
+            style: TextStyle(color: cs.onPrimary)),
         automaticallyImplyLeading: false,
+        // 뒤로 가기 추가
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            context.go('/home');
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
@@ -113,16 +122,19 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   border: Border.all(color: ext.accentSoft),
                   borderRadius: BorderRadius.circular(8),
                   image: _images.isNotEmpty
-                      ? DecorationImage(image: FileImage(_images.first), fit: BoxFit.cover)
+                      ? DecorationImage(
+                          image: FileImage(_images.first), fit: BoxFit.cover)
                       : null,
                 ),
                 child: _images.isEmpty
-                    ? Icon(Icons.camera_alt, size: 36, color: cs.onSurfaceVariant)
+                    ? Icon(Icons.camera_alt,
+                        size: 36, color: cs.onSurfaceVariant)
                     : null,
               ),
             ),
             const SizedBox(height: 4),
-            Text('${_images.length}/10', style: TextStyle(fontSize: 12, color: cs.onSurface)),
+            Text('${_images.length}/10',
+                style: TextStyle(fontSize: 12, color: cs.onSurface)),
             const SizedBox(height: 24),
 
             _buildLabel(context, '제목'),
@@ -132,7 +144,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
             _buildLabel(context, '가격'),
             const SizedBox(height: 4),
-            _buildTextField(_priceCtrl, '원', cs, ext, keyboardType: TextInputType.number),
+            _buildTextField(_priceCtrl, '원', cs, ext,
+                keyboardType: TextInputType.number),
             const SizedBox(height: 16),
 
             _buildLabel(context, '상세설명'),
@@ -153,10 +166,12 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
             backgroundColor: cs.primary,
             foregroundColor: cs.onPrimary,
             minimumSize: const Size.fromHeight(48),
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))),
           ),
           onPressed: _submit,
-          child: Text(isEditing ? '수정하기' : '등록하기', style: TextStyle(fontSize: 18, color: cs.onPrimary)),
+          child: Text(isEditing ? '수정하기' : '등록하기',
+              style: TextStyle(fontSize: 18, color: cs.onPrimary)),
         ),
       ),
     );
@@ -164,7 +179,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
   Widget _buildLabel(BuildContext context, String text) {
     final cs = Theme.of(context).colorScheme;
-    return Text(text, style: TextStyle(fontWeight: FontWeight.w600, color: cs.onSurface));
+    return Text(text,
+        style: TextStyle(fontWeight: FontWeight.w600, color: cs.onSurface));
   }
 
   Widget _buildTextField(
@@ -244,7 +260,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                 label: Text(t, style: TextStyle(color: cs.onSurface)),
                 backgroundColor: ext.accentSoft.withAlpha(50),
                 shape: StadiumBorder(side: BorderSide(color: ext.accentSoft)),
-                deleteIcon: Icon(Icons.close, size: 18, color: cs.onSurfaceVariant),
+                deleteIcon:
+                    Icon(Icons.close, size: 18, color: cs.onSurfaceVariant),
                 onDeleted: () => setState(() => _tags.remove(t)),
               ),
             ),
@@ -286,11 +303,14 @@ class CategoryDialog extends StatelessWidget {
               context: context,
               builder: (_) => SimpleDialog(
                 backgroundColor: cs.surface,
-                title: Text('$mainCat - 소분류 선택', style: TextStyle(color: cs.onSurface)),
+                title: Text('$mainCat - 소분류 선택',
+                    style: TextStyle(color: cs.onSurface)),
                 children: categories[mainCat]!
                     .map((subCat) => SimpleDialogOption(
-                          child: Text(subCat, style: TextStyle(color: cs.onSurface)),
-                          onPressed: () => Navigator.pop(context, '$mainCat > $subCat'),
+                          child: Text(subCat,
+                              style: TextStyle(color: cs.onSurface)),
+                          onPressed: () =>
+                              Navigator.pop(context, '$mainCat > $subCat'),
                         ))
                     .toList(),
               ),

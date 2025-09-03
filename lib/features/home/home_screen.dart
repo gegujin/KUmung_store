@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kumeong_store/features/chat/chat_list_screen.dart';
 import 'package:kumeong_store/models/post.dart'; // demoProduct 사용
 import '../product/product_list_screen.dart';
 import '../home/alarm_screen.dart';
@@ -201,6 +202,12 @@ class _HomePageState extends State<HomePage> {
         ],
         currentIndex: 0,
         onTap: (index) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ChatListScreen()),
+            );
+          }
           if (index == 2) {
             Navigator.push(
               context,
