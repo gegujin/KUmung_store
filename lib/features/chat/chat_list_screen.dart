@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 import '../../core/theme.dart';
 
 class ChatSummary {
@@ -150,7 +151,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
           },
         ),
       ),
-      bottomNavigationBar: _BottomNav(currentIndex: 1),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
     );
   }
 }
@@ -172,38 +173,6 @@ class _Avatar extends StatelessWidget {
       radius: radius,
       backgroundImage: NetworkImage(url!),
       backgroundColor: Colors.transparent,
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  const _BottomNav({required this.currentIndex});
-  final int currentIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    return NavigationBar(
-      selectedIndex: currentIndex,
-      destinations: const [
-        NavigationDestination(icon: Icon(Icons.home_outlined), label: '메인화면'),
-        NavigationDestination(
-            icon: Icon(Icons.chat_bubble_outline), label: '채팅'),
-        NavigationDestination(
-            icon: Icon(Icons.person_outline), label: '마이 페이지'),
-      ],
-      onDestinationSelected: (i) {
-        switch (i) {
-          case 0:
-            context.go('/home'); // 홈
-            break;
-          case 1:
-            context.go('/chat');
-            break;
-          case 2:
-            context.go('/mypage');
-            break;
-        }
-      },
     );
   }
 }

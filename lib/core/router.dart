@@ -16,6 +16,8 @@ import '../features/delivery/ku_delivery_list_screen.dart';
 import '../features/delivery/ku_delivery_alert_screen.dart';
 import '../features/delivery/ku_delivery_detail_screen.dart';
 import '../features/delivery/delivery_status_screen.dart';
+import '../features/mypage/heart_screen.dart'; // ✅ 관심목록
+
 //import '../features/settings/settings_screen.dart';
 //import '../features/delivery/request_delivery_screen.dart';
 import '../features/mypage/mypage_screen.dart';
@@ -75,23 +77,6 @@ class AppRouter {
 final GoRouter router = GoRouter(
   debugLogDiagnostics: kDebugMode,
   initialLocation: '/',
-  /*
-  refreshListenable: auth,
-  redirect: (context, state) {
-    final loggingIn = state.matchedLocation == '/login';
-    final needAuth = _requiresAuth(state.matchedLocation);
-    final loggedIn = auth.isLoggedIn;
-
-    if (!loggedIn && needAuth && !loggingIn) {
-      final from = Uri.encodeComponent(state.uri.toString());
-      return '/login?return=$from';
-    }
-    if (loggedIn && loggingIn) {
-      return '/';
-    }
-    return null;
-  },
-  */
   routes: [
     GoRoute(
       path: '/',
@@ -176,6 +161,11 @@ final GoRouter router = GoRouter(
           categoryTop: categoryTop,
         );
       },
+    ),
+    GoRoute(
+      path: '/favorites',
+      name: 'favorites',
+      builder: (_, __) => const HeartPage(), // ✅ HeartPage로 연결
     ),
     GoRoute(
       path: '/pay/secure/:roomId/:productId',

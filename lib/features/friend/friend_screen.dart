@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 import '../friend/friend_detail_screen.dart';
 import '../home/home_screen.dart';
 import '../mypage/mypage_screen.dart';
@@ -133,27 +134,7 @@ class _FriendsPageState extends State<FriendsPage> {
       ),
 
       // ✅ 하단 네비게이션
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1, // 현재 친구 탭
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: '친구채팅'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const HomePage()),
-            );
-          } else if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const MyPage()),
-            );
-          }
-        },
-      ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }

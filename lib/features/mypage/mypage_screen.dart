@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kumeong_store/features/chat/chat_list_screen.dart';
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 import '../mypage/point_screen.dart';
 import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
@@ -9,6 +10,7 @@ import '../mypage/heart_screen.dart';
 import '../mypage/recent_post_screen.dart';
 import '../mypage/sell_screen.dart';
 import '../mypage/buy_screen.dart';
+
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
@@ -174,28 +176,7 @@ class MyPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: '1:1채팅'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
-        ],
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const HomePage()),
-            );
-          }
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ChatListScreen()),
-            );
-          }
-        },
-      ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }

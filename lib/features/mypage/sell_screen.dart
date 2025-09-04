@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 
 class SellPage extends StatelessWidget {
   const SellPage({super.key});
@@ -90,6 +91,7 @@ class SellPage extends StatelessWidget {
                 );
               },
             ),
+        bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }

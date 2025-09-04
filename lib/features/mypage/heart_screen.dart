@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 
 class HeartPage extends StatelessWidget {
   const HeartPage({super.key});
@@ -96,6 +97,7 @@ class HeartPage extends StatelessWidget {
                 );
               },
             ),
+        bottomNavigationBar: const AppBottomNav(currentIndex: 2),
     );
   }
 }

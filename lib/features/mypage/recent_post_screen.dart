@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 
 class RecentPostPage extends StatelessWidget {
   const RecentPostPage({super.key});
@@ -101,6 +102,7 @@ class RecentPostPage extends StatelessWidget {
                 );
               },
             ),
+        bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }
