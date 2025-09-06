@@ -151,7 +151,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
           },
         ),
       ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 1),
     );
   }
 }

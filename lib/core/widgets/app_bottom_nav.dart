@@ -8,11 +8,7 @@ import 'package:kumeong_store/features/mypage/heart_screen.dart'; // ✅ 관심�
 /// 공용 하단바
 /// - currentIndex: 0 홈 / 1 채팅 / 2 관심목록 / 3 마이페이지
 class AppBottomNav extends StatelessWidget {
-  const AppBottomNav({
-    super.key,
-    required this.currentIndex,
-  });
-
+  const AppBottomNav({super.key, required this.currentIndex});
   final int currentIndex;
 
   @override
@@ -20,7 +16,7 @@ class AppBottomNav extends StatelessWidget {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
-      selectedItemColor: const Color(0xFF2E7D6B), // 선택 아이템 색
+      selectedItemColor: const Color(0xFF2E7D6B),
       unselectedItemColor: Colors.grey,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
@@ -30,29 +26,11 @@ class AppBottomNav extends StatelessWidget {
       ],
       onTap: (index) {
         if (index == currentIndex) return; // 같은 탭이면 무시
-
         switch (index) {
-          case 0: // 홈
-            context.goNamed('home'); // 홈 라우트 이름 맞게 변경 필요
-            break;
-          case 1: // 채팅
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ChatListScreen()),
-            );
-            break;
-          case 2: // 관심목록
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const HeartPage()),
-            );
-            break;
-          case 3: // 마이페이지
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const MyPage()),
-            );
-            break;
+          case 0: context.goNamed('home'); break;
+          case 1: context.goNamed('chatList'); break;
+          case 2: context.goNamed('favorites'); break;
+          case 3: context.goNamed('mypage'); break;
         }
       },
     );
