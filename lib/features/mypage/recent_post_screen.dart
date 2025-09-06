@@ -6,7 +6,7 @@ class RecentPostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary; // Theme 색상 적용
 
     // 더미 데이터 (최신순 정렬 가정)
     final List<Map<String, String>> recentPosts = [
@@ -102,7 +102,7 @@ class RecentPostPage extends StatelessWidget {
                 );
               },
             ),
-        bottomNavigationBar: const AppBottomNav(currentIndex: 3),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }

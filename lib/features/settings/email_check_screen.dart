@@ -7,31 +7,34 @@ class EmailCheckPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary; // 테마 색상 적용
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mainColor,
         centerTitle: true,
-        title: const Text("가입 이메일 확인", style: TextStyle(color: Colors.white)),
+        title: const Text(
+          "가입 이메일 확인",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start, // 위쪽 정렬 시작
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const SizedBox(height: 100), // 화면 상단에서 100px 아래로 위치
+          const SizedBox(height: 100), // 화면 상단에서 100px 아래로
           Center(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+                color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withOpacity(0.08),
                     blurRadius: 6,
                     offset: const Offset(0, 3),
                   ),
@@ -42,7 +45,7 @@ class EmailCheckPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: mainColor,
+                  color: mainColor, // 테마 색상 적용
                 ),
               ),
             ),

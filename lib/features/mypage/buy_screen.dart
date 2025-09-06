@@ -13,7 +13,7 @@ class BuyPage extends StatelessWidget {
       {"item": "책상용 스탠드", "date": "2025-07-05", "price": "₩45,000"},
     ];
 
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary; // Theme 색상 적용
 
     return Scaffold(
       appBar: AppBar(

@@ -3,7 +3,9 @@ import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 import '../mypage/mypage_screen.dart';
 import '../home/home_screen.dart';
 
+// =========================
 // 상품 페이지
+// =========================
 class ProductPage extends StatelessWidget {
   final String category; // 선택된 하위 카테고리
   final List<String> products;
@@ -16,7 +18,7 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29); // 메인 색상
+    final mainColor = Theme.of(context).colorScheme.primary; // 색상 변경
 
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +87,9 @@ class ProductPage extends StatelessWidget {
   }
 }
 
+// =========================
 // 카테고리 페이지
+// =========================
 class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key});
 
@@ -111,7 +115,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary; // 색상 변경
 
     return Scaffold(
       appBar: AppBar(

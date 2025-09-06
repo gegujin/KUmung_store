@@ -197,13 +197,14 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:kumeong_store/models/latlng.dart' as model;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
+
+const Color kuInfo = Color(0xFF147AD6);
 
 class KuDeliveryDetailArgs {
   final String title;
@@ -261,14 +262,24 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kuInfo,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => context.pop(),
         ),
-        title: const Text('배달 상세페이지'),
+        title: const Text(
+          '배달 상세페이지',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
-          IconButton(icon: const Icon(Icons.home_outlined), onPressed: () => context.go('/')),
-          IconButton(icon: const Icon(Icons.share_outlined), onPressed: () {/* TODO: 공유 */}),
+          IconButton(
+            icon: const Icon(Icons.home_outlined, color: Colors.white),
+            onPressed: () => context.go('/'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.share_outlined, color: Colors.white),
+            onPressed: () {/* TODO: 공유 */},
+          ),
           PopupMenuButton<String>(
             itemBuilder: (ctx) => const [
               PopupMenuItem(value: 'report', child: Text('신고하기')),
@@ -277,7 +288,6 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
           ),
         ],
       ),
-
       body: ListView(
         padding: const EdgeInsets.only(bottom: 24),
         children: [
@@ -285,17 +295,21 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
           Card(
             color: Colors.white,
             margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: SizedBox(
               height: 300,
               child: Center(
                 child: Image.network(
                   widget.args.imageUrl,
                   fit: BoxFit.contain,
-                  loadingBuilder: (_, child, prog) =>
-                      prog == null ? child : const Center(child: CircularProgressIndicator()),
-                  errorBuilder: (_, __, ___) =>
-                      const Center(child: Icon(Icons.broken_image, size: 48)),
+                  loadingBuilder: (_, child, prog) => prog == null
+                      ? child
+                      : const Center(
+                          child: CircularProgressIndicator(color: kuInfo)),
+                  errorBuilder: (_, __, ___) => const Center(
+                      child: Icon(Icons.broken_image,
+                          size: 48, color: Colors.grey)),
                 ),
               ),
             ),
@@ -315,10 +329,12 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                   children: [
                     CircleAvatar(
                       radius: 28,
-                      backgroundImage: (widget.args.sellerAvatarUrl == null || widget.args.sellerAvatarUrl!.isEmpty)
+                      backgroundImage: (widget.args.sellerAvatarUrl == null ||
+                              widget.args.sellerAvatarUrl!.isEmpty)
                           ? null
                           : NetworkImage(widget.args.sellerAvatarUrl!),
-                      child: (widget.args.sellerAvatarUrl == null || widget.args.sellerAvatarUrl!.isEmpty)
+                      child: (widget.args.sellerAvatarUrl == null ||
+                              widget.args.sellerAvatarUrl!.isEmpty)
                           ? const Icon(Icons.person_outline)
                           : null,
                     ),
@@ -327,7 +343,8 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.args.sellerName, style: t.titleMedium),
+                          Text(widget.args.sellerName,
+                              style: t.titleMedium?.copyWith(color: kuInfo)),
                           const SizedBox(height: 6),
                           Row(
                             children: [
@@ -335,15 +352,20 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                               const SizedBox(width: 8),
                               const Text('·'),
                               const SizedBox(width: 8),
-                              Text('${widget.args.minutesAgo}분 전', style: t.bodyMedium),
+                              Text('${widget.args.minutesAgo}분 전',
+                                  style: t.bodyMedium),
                             ],
                           ),
                           const SizedBox(height: 6),
                           Row(
                             children: [
-                              Text('출발: ${widget.args.start}', style: t.bodySmall?.copyWith(color: Colors.grey[700])),
+                              Text('출발: ${widget.args.start}',
+                                  style: t.bodySmall
+                                      ?.copyWith(color: Colors.grey[700])),
                               const SizedBox(width: 12),
-                              Text('도착: ${widget.args.end}', style: t.bodySmall?.copyWith(color: Colors.grey[700])),
+                              Text('도착: ${widget.args.end}',
+                                  style: t.bodySmall
+                                      ?.copyWith(color: Colors.grey[700])),
                             ],
                           ),
                         ],
@@ -352,7 +374,9 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                Text('가격: $_priceText원', style: t.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                Text('가격: $_priceText원',
+                    style: t.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, color: kuInfo)),
               ],
             ),
           ),
@@ -373,7 +397,8 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                             const TextSpan(text: '거래 희망 장소  '),
                             TextSpan(
                               text: widget.args.end,
-                              style: t.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                              style: t.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700, color: kuInfo),
                             ),
                           ],
                         ),
@@ -381,14 +406,13 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                     ),
                     TextButton.icon(
                       onPressed: _openNaverRoute,
-                      icon: const Icon(Icons.open_in_new),
-                      label: const Text('지도 보기'),
-                      style: TextButton.styleFrom(foregroundColor: cs.primary),
+                      icon: const Icon(Icons.open_in_new, color: kuInfo),
+                      label:
+                          const Text('지도 보기', style: TextStyle(color: kuInfo)),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: SizedBox(
@@ -396,7 +420,8 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                     child: NaverMap(
                       options: NaverMapViewOptions(
                         initialCameraPosition: NCameraPosition(
-                          target: NLatLng(widget.args.endCoord.lat, widget.args.endCoord.lng),
+                          target: NLatLng(widget.args.endCoord.lat,
+                              widget.args.endCoord.lng),
                           zoom: 15,
                         ),
                         locationButtonEnable: true,
@@ -404,42 +429,46 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                       onMapReady: (controller) async {
                         _mapController = controller;
 
-                        // (선택) 파란 점: 권한 허용 후
-                        // await controller.setLocationTrackingMode(NLocationTrackingMode.follow);
-
-                        // 출발/도착 마커 (align 파라미터 제거)
                         final startMarker = NMarker(
                           id: 'start',
-                          position: NLatLng(widget.args.startCoord.lat, widget.args.startCoord.lng),
+                          position: NLatLng(widget.args.startCoord.lat,
+                              widget.args.startCoord.lng),
                           caption: const NOverlayCaption(text: '출발'),
                         );
                         final endMarker = NMarker(
                           id: 'end',
-                          position: NLatLng(widget.args.endCoord.lat, widget.args.endCoord.lng),
+                          position: NLatLng(widget.args.endCoord.lat,
+                              widget.args.endCoord.lng),
                           caption: const NOverlayCaption(text: '도착'),
                         );
-                        await controller.addOverlayAll({startMarker, endMarker});
+                        await controller
+                            .addOverlayAll({startMarker, endMarker});
 
-                        // 간단한 경로 라인
                         final routeLine = NPolylineOverlay(
                           id: 'route',
                           coords: [
-                            NLatLng(widget.args.startCoord.lat, widget.args.startCoord.lng),
-                            NLatLng(widget.args.endCoord.lat, widget.args.endCoord.lng),
+                            NLatLng(widget.args.startCoord.lat,
+                                widget.args.startCoord.lng),
+                            NLatLng(widget.args.endCoord.lat,
+                                widget.args.endCoord.lng),
                           ],
                           width: 6,
+                          color: kuInfo,
                         );
                         await controller.addOverlay(routeLine);
 
-                        // ✅ 카메라 이동: scrollTo/zoomTo 대신 fromCameraPosition 사용
-                        final midLat = (widget.args.startCoord.lat + widget.args.endCoord.lat) / 2;
-                        final midLng = (widget.args.startCoord.lng + widget.args.endCoord.lng) / 2;
-                        
+                        final midLat = (widget.args.startCoord.lat +
+                                widget.args.endCoord.lat) /
+                            2;
+                        final midLng = (widget.args.startCoord.lng +
+                                widget.args.endCoord.lng) /
+                            2;
+
                         await controller.updateCamera(
                           NCameraUpdate.fromCameraPosition(
                             NCameraPosition(
                               target: NLatLng(midLat, midLng),
-                              zoom: 14, // 필요하면 13~15 사이로 조정
+                              zoom: 14,
                             ),
                           ),
                         );
@@ -452,7 +481,6 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
           ),
         ],
       ),
-
       bottomNavigationBar: SafeArea(
         top: false,
         child: Padding(
@@ -461,13 +489,15 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
             height: 52,
             width: double.infinity,
             child: FilledButton(
+              style: FilledButton.styleFrom(backgroundColor: kuInfo),
               onPressed: () => context.pushNamed('request-delivery', extra: {
                 'title': widget.args.title,
                 'start': widget.args.start,
                 'end': widget.args.end,
                 'price': widget.args.price,
               }),
-              child: const Text('KU대리 진행하기'),
+              child: const Text('KU대리 진행하기',
+                  style: TextStyle(color: Colors.white)),
             ),
           ),
         ),
@@ -476,9 +506,8 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
   }
 
   Future<void> _openNaverRoute() async {
-    model.LatLng? my; // 현재 위치(있으면 사용)
+    model.LatLng? my;
     try {
-      // 위치 권한/설정 처리
       var perm = await Geolocator.checkPermission();
       if (perm == LocationPermission.denied) {
         perm = await Geolocator.requestPermission();
@@ -490,11 +519,9 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
             desiredAccuracy: LocationAccuracy.high);
         my = model.LatLng(lat: pos.latitude, lng: pos.longitude);
       }
-    } catch (_) {
-      // 권한 거부/실패 시 my는 null → startCoord 사용
-    }
+    } catch (_) {}
 
-    final s = my ?? widget.args.startCoord; // 현재 위치가 있으면 그걸 출발로
+    final s = my ?? widget.args.startCoord;
     final d = widget.args.endCoord;
 
     final scheme = Uri.parse(

@@ -353,13 +353,13 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 import 'package:kumeong_store/models/latlng.dart' as model;
-import '../../core/theme.dart';
+
+const Color kuInfo = Color(0xFF147AD6);
 
 /// 배달 현황 화면으로 전달할 Args
 class DeliveryStatusArgs {
@@ -411,14 +411,14 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final kux = Theme.of(context).extension<KuColors>()!;
     final a = widget.args;
-
     final priceText = _formatPrice(a.price);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('배달 현황')),
+      appBar: AppBar(
+        backgroundColor: kuInfo,
+        title: const Text('배달 현황'),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: [
@@ -430,9 +430,9 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: cs.surface,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: cs.primaryContainer),
+              border: Border.all(color: kuInfo),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -443,7 +443,8 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
                   children: [
                     Expanded(child: RowLine(label: '출발', value: a.startName)),
                     const SizedBox(width: 8),
-                    Container(width: 1, height: 18, color: cs.outlineVariant),
+                    Container(
+                        width: 1, height: 18, color: kuInfo.withOpacity(0.5)),
                     const SizedBox(width: 8),
                     Expanded(child: RowLine(label: '도착', value: a.endName)),
                   ],
@@ -453,7 +454,8 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
                 const SizedBox(height: 10),
                 Text(
                   '${a.moveTypeText} (예상시간 : ${a.etaMinutes}분)',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: cs.onBackground),
+                  style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w700, color: kuInfo),
                 ),
               ],
             ),
@@ -466,33 +468,29 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
             height: 360,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: cs.primaryContainer),
+              border: Border.all(color: kuInfo),
             ),
             clipBehavior: Clip.antiAlias,
-            child: _buildMapOrPlaceholder(kux),
+            child: _buildMapOrPlaceholder(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMapOrPlaceholder(KuColors kux) {
-    // 웹(Chrome)은 미지원 → 플레이스홀더
+  Widget _buildMapOrPlaceholder() {
     if (kIsWeb) {
       return const Center(child: Text('웹 미리보기: 지도는 모바일에서 표시됩니다.'));
     }
 
     final a = widget.args;
 
-    // 지도를 감싸서 버튼 오버레이
     return Stack(
       children: [
         NaverMap(
-          // 최신 버전에서 onCameraChange 시그니처가 다를 수 있으므로 사용 안 함
           onMapReady: (controller) async {
             _mapCtrl = controller;
 
-            // 출발/도착 마커
             final start = NMarker(
               id: 'start',
               position: NLatLng(a.startCoord.lat, a.startCoord.lng),
@@ -505,28 +503,25 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
             );
             await controller.addOverlayAll({start, end});
 
-            // 경로(없으면 직선)
             final points = (a.route != null && a.route!.isNotEmpty)
                 ? a.route!
                 : <model.LatLng>[a.startCoord, a.endCoord];
 
             final polyline = NPolylineOverlay(
               id: 'route',
-              coords: points.map((p) => NLatLng(p.lat, p.lng)).toList(growable: false),
+              coords: points
+                  .map((p) => NLatLng(p.lat, p.lng))
+                  .toList(growable: false),
               width: 6,
+              color: kuInfo,
             );
             await controller.addOverlay(polyline);
 
-            // 두 지점이 모두 보이도록 카메라 (패딩 인자 없는 버전 호환)
             final bounds = NLatLngBounds(
-              southWest: NLatLng(
-                _min(a.startCoord.lat, a.endCoord.lat),
-                _min(a.startCoord.lng, a.endCoord.lng),
-              ),
-              northEast: NLatLng(
-                _max(a.startCoord.lat, a.endCoord.lat),
-                _max(a.startCoord.lng, a.endCoord.lng),
-              ),
+              southWest: NLatLng(_min(a.startCoord.lat, a.endCoord.lat),
+                  _min(a.startCoord.lng, a.endCoord.lng)),
+              northEast: NLatLng(_max(a.startCoord.lat, a.endCoord.lat),
+                  _max(a.startCoord.lng, a.endCoord.lng)),
             );
             await controller.updateCamera(NCameraUpdate.fitBounds(bounds));
           },
@@ -535,74 +530,8 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
             scaleBarEnable: false,
           ),
         ),
-
-        // 우측 하단: 커스텀 줌 +/-
-        Positioned(
-          right: 12,
-          bottom: 12,
-          child: Column(
-            children: [
-              _roundBtn(
-                icon: Icons.add,
-                tooltip: '확대',
-                onTap: () => _mapCtrl?.updateCamera(NCameraUpdate.zoomIn()),
-              ),
-              const SizedBox(height: 8),
-              _roundBtn(
-                icon: Icons.remove,
-                tooltip: '축소',
-                onTap: () => _mapCtrl?.updateCamera(NCameraUpdate.zoomOut()),
-              ),
-              const SizedBox(height: 8),
-              _roundBtn(
-                icon: Icons.explore,
-                tooltip: '뷰 리셋',
-                onTap: () async {
-                  final ctrl = _mapCtrl;
-                  if (ctrl == null) return;
-
-                  // 두 지점이 모두 보이도록 다시 맞추기 (나침반 초기화 대용)
-                  final b = NLatLngBounds(
-                    southWest: NLatLng(
-                      _min(a.startCoord.lat, a.endCoord.lat),
-                      _min(a.startCoord.lng, a.endCoord.lng),
-                    ),
-                    northEast: NLatLng(
-                      _max(a.startCoord.lat, a.endCoord.lat),
-                      _max(a.startCoord.lng, a.endCoord.lng),
-                    ),
-                  );
-                  await ctrl.updateCamera(NCameraUpdate.fitBounds(b));
-                },
-              ),
-            ],
-          ),
-        ),
       ],
     );
-  }
-
-  // 둥근 버튼 헬퍼
-  Widget _roundBtn({
-    required IconData icon,
-    required VoidCallback onTap,
-    String? tooltip,
-  }) {
-    final cs = Theme.of(context).colorScheme;
-    final btn = Material(
-      color: cs.surface,
-      shape: const CircleBorder(),
-      elevation: 2,
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 22, color: cs.onSurface),
-        ),
-      ),
-    );
-    return tooltip == null ? btn : Tooltip(message: tooltip, child: btn);
   }
 
   // 30,000원 포맷
@@ -630,12 +559,11 @@ class ProductHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
-        color: cs.surface,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: cs.primaryContainer),
+        border: Border.all(color: kuInfo),
       ),
       padding: const EdgeInsets.all(12),
       child: Row(
@@ -646,7 +574,7 @@ class ProductHeader extends StatelessWidget {
               width: 110,
               height: 110,
               child: (imageUrl == null || imageUrl!.isEmpty)
-                  ? Container(color: cs.secondaryContainer)
+                  ? Container(color: kuInfo.withOpacity(0.3))
                   : Image.network(imageUrl!, fit: BoxFit.cover),
             ),
           ),
@@ -673,18 +601,17 @@ class RowLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     return RichText(
       text: TextSpan(
         style: const TextStyle(fontSize: 15),
         children: [
           TextSpan(
             text: '$label: ',
-            style: TextStyle(color: cs.onSurfaceVariant, fontWeight: FontWeight.w600),
+            style: TextStyle(color: kuInfo, fontWeight: FontWeight.w600),
           ),
           TextSpan(
             text: value,
-            style: TextStyle(color: cs.onBackground),
+            style: const TextStyle(color: Colors.black87),
           ),
         ],
       ),

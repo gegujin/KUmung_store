@@ -23,7 +23,7 @@ class _FriendChatPageState extends State<FriendChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +63,7 @@ class _FriendChatPageState extends State<FriendChatPage> {
             ),
           ),
 
-          // ✅ 메시지 입력창
+          // 메시지 입력창
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             color: Colors.grey[200],
@@ -80,7 +80,7 @@ class _FriendChatPageState extends State<FriendChatPage> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Colors.blue),
+                  icon: Icon(Icons.send, color: mainColor),
                   onPressed: _sendMessage,
                 ),
               ],

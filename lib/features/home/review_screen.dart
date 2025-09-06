@@ -13,10 +13,12 @@ class _ReviewPageState extends State<ReviewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final mainColor = Theme.of(context).colorScheme.primary; // Theme 색상 적용
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("거래 후기 작성", style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 0, 59, 29),
+        backgroundColor: mainColor,
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -42,7 +44,6 @@ class _ReviewPageState extends State<ReviewPage> {
                     ),
                     onPressed: () {
                       setState(() {
-                        // 같은 별을 다시 누르면 취소
                         if (_rating == index + 1) {
                           _rating = 0;
                         } else {
@@ -71,14 +72,14 @@ class _ReviewPageState extends State<ReviewPage> {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 0, 59, 29),
+                  backgroundColor: mainColor,
                 ),
                 onPressed: () {
                   String reviewText = _reviewController.text;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("별점: $_rating, 후기: $reviewText")),
                   );
-                  Navigator.pop(context); // 작성 후 뒤로 가기
+                  Navigator.pop(context);
                 },
                 child: const Text(
                   "제출하기",

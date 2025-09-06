@@ -5,13 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'ku_delivery_detail_screen.dart';
 import 'package:kumeong_store/models/latlng.dart' as model;
 
+const Color kuInfo = Color(0xFF147AD6);
+
 class KuDeliveryAlertScreen extends StatelessWidget {
   const KuDeliveryAlertScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     // TODO: 백엔드 연동 시 알림 리스트 API 응답으로 대체
-    // 각 알림에 출발/도착 좌표(startCoord/endCoord) 포함 (지금은 더미)
     final alerts = [
       {
         'text': '가까운 위치에 KU대리 신청이 있습니다!',
@@ -23,9 +24,8 @@ class KuDeliveryAlertScreen extends StatelessWidget {
         'end': '베스트마트',
         'price': 30000,
         'imageUrl': 'https://picsum.photos/800/600',
-        'startCoord': model.LatLng(lat: 37.3219, lng: 126.8309), // TODO: API 값으로 교체
-        'endCoord': model.LatLng(lat: 37.3352, lng: 126.8251),   // TODO: API 값으로 교체
-        // 'deliveryRequestId': 'xxxx',
+        'startCoord': model.LatLng(lat: 37.3219, lng: 126.8309),
+        'endCoord': model.LatLng(lat: 37.3352, lng: 126.8251),
       },
       {
         'text': '설정 지역에 KU대리 신청이 2건 있습니다!',
@@ -37,21 +37,25 @@ class KuDeliveryAlertScreen extends StatelessWidget {
         'end': '중앙도서관',
         'price': 12000,
         'imageUrl': 'https://picsum.photos/seed/2/800/600',
-        'startCoord': model.LatLng(lat: 37.3000, lng: 126.8200), // TODO: API 값으로 교체
-        'endCoord': model.LatLng(lat: 37.3055, lng: 126.8355),   // TODO: API 값으로 교체
+        'startCoord': model.LatLng(lat: 37.3000, lng: 126.8200),
+        'endCoord': model.LatLng(lat: 37.3055, lng: 126.8355),
       },
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('배달 알림'),
+        backgroundColor: kuInfo,
+        title: const Text(
+          '배달 알림',
+          style: TextStyle(color: Colors.white),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => context.pop(),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.settings, color: Colors.white),
             onPressed: () {
               // TODO: 설정 화면 이동
             },
@@ -64,14 +68,15 @@ class KuDeliveryAlertScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final alert = alerts[index];
           return ListTile(
-            title: Text(alert['text'] as String),
+            title: Text(
+              alert['text'] as String,
+              style: const TextStyle(color: Colors.black87),
+            ),
             trailing: Text(
               alert['time'] as String,
-              style: const TextStyle(color: Colors.grey, fontSize: 12),
+              style: TextStyle(color: kuInfo, fontSize: 12),
             ),
             onTap: () {
-              // --- 백엔드 연동 가이드 ---
-              // deliveryRequestId로 상세 조회 → KuDeliveryDetailArgs 매핑 → pushNamed
               final args = KuDeliveryDetailArgs(
                 title: alert['title'] as String? ?? '배달',
                 sellerName: alert['sellerName'] as String? ?? '거래자',

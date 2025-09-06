@@ -5,7 +5,8 @@ class PasswordFindPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    // 앱 테마 primary color 사용
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       appBar: AppBar(

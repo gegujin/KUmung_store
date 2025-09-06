@@ -27,7 +27,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary; // Theme 색상 적용
 
     return Scaffold(
       appBar: AppBar(

@@ -14,11 +14,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary; // 테마 색상 적용
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mainColor,
+        backgroundColor: mainColor, // 테마 색상 적용
         centerTitle: true,
         title: const Text('환경설정', style: TextStyle(color: Colors.white)),
         leading: IconButton(

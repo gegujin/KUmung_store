@@ -11,13 +11,12 @@ import '../mypage/recent_post_screen.dart';
 import '../mypage/sell_screen.dart';
 import '../mypage/buy_screen.dart';
 
-
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary; // Theme 색상 적용
 
     Widget _buildDivider() {
       return const Divider(
@@ -76,7 +75,7 @@ class MyPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   elevation: 0,
-                  backgroundColor: const Color(0xFFAED581),
+                  backgroundColor: mainColor, // Theme 색상 적용
                 ),
                 child: const Text(
                   '프로필 수정',
@@ -169,7 +168,7 @@ class MyPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const BuyPage()), // ✅ 연결
+                  MaterialPageRoute(builder: (_) => const BuyPage()), // 연결
                 );
               },
             ),

@@ -29,7 +29,7 @@ class _FriendPlusPageState extends State<FriendPlusPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     // 검색 결과
     final searchResults = allUsers
@@ -97,9 +97,9 @@ class _FriendPlusPageState extends State<FriendPlusPage> {
                         ),
                         title: Text(user),
                         trailing: IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.person_add,
-                            color: Colors.green,
+                            color: mainColor,
                           ),
                           onPressed: () {
                             setState(() {

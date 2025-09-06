@@ -6,7 +6,8 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    // 앱 테마 색상 사용
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +26,7 @@ class SignUpPage extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const SizedBox(height: 40), // 상단 여백
+              const SizedBox(height: 40),
               Row(
                 children: [
                   Expanded(
@@ -38,7 +39,7 @@ class SignUpPage extends StatelessWidget {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: mainColor,
-                      minimumSize: const Size(100, 40), // 버튼 길이 조정
+                      minimumSize: const Size(100, 40),
                     ),
                     onPressed: () {},
                     child: const Text(
@@ -63,7 +64,7 @@ class SignUpPage extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainColor,
-                  minimumSize: const Size(double.infinity, 45), // 버튼 길이 조금 줄임
+                  minimumSize: const Size(double.infinity, 45),
                 ),
                 onPressed: () {
                   Navigator.push(

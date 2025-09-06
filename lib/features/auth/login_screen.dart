@@ -9,7 +9,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    // ✅ 앱 테마 primary color 사용
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -90,9 +91,9 @@ class LoginPage extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => const SchoolSignUpPage()),
                   );
                 },
-                child: const Text(
+                child: Text(
                   '회원가입',
-                  style: TextStyle(color: Color.fromARGB(255, 0, 59, 29)),
+                  style: TextStyle(color: mainColor),
                 ),
               ),
             ],

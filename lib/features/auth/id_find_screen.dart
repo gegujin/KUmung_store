@@ -5,7 +5,8 @@ class IdFindPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    // ✅ 앱 전체에서 사용하는 테마 색 가져오기
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       appBar: AppBar(
@@ -20,7 +21,9 @@ class IdFindPage extends StatelessWidget {
           children: [
             const Text('가입 시 입력한 이메일을 입력하세요.'),
             const SizedBox(height: 20),
-            TextField(decoration: const InputDecoration(labelText: '이메일')),
+            TextField(
+              decoration: const InputDecoration(labelText: '이메일'),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(

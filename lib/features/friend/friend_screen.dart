@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 import '../friend/friend_detail_screen.dart';
-import '../home/home_screen.dart';
-import '../mypage/mypage_screen.dart';
 import '../friend/friend_plus_screen.dart';
 
 class FriendsPage extends StatefulWidget {
@@ -20,7 +18,7 @@ class _FriendsPageState extends State<FriendsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     // 검색 필터
     final filteredFriends =
@@ -63,7 +61,7 @@ class _FriendsPageState extends State<FriendsPage> {
                 const SizedBox(width: 10),
                 // ✅ 친구 추가 버튼
                 IconButton(
-                  icon: const Icon(Icons.person_add, color: Colors.white),
+                  icon: Icon(Icons.person_add, color: Colors.white),
                   onPressed: () async {
                     final newFriends = await Navigator.push(
                       context,
@@ -118,7 +116,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   ),
                   title: Text(friend),
                   onTap: () {
-                    // 클릭 시 채팅 화면 연결 가능
+                    // 클릭 시 친구 상세 화면 이동
                     Navigator.push(
                       context,
                       MaterialPageRoute(

@@ -8,7 +8,7 @@ class FriendDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       appBar: AppBar(
@@ -76,7 +76,7 @@ class FriendDetailPage extends StatelessWidget {
               ),
             ),
 
-            // ✅ 채팅하기 버튼
+            // 채팅하기 버튼
             SizedBox(
               width: double.infinity,
               height: 50,

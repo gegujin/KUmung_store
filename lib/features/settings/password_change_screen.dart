@@ -38,7 +38,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary; // 테마 색상 적용
 
     return Scaffold(
       appBar: AppBar(
@@ -109,7 +109,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _changePassword,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: mainColor,
+                    backgroundColor: mainColor, // 테마 색상 적용
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

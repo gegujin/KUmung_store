@@ -7,7 +7,7 @@ class AlarmPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = const Color.fromARGB(255, 0, 59, 29);
+    final mainColor = Theme.of(context).colorScheme.primary; // Theme 기반 색상
 
     return DefaultTabController(
       length: 2, // 탭 2개
@@ -81,7 +81,6 @@ class AlarmList extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => const ReviewPage()),
               );
             }
-            // 그 외 알림은 클릭해도 동작 없음
           },
           child: Column(
             children: [
@@ -106,7 +105,6 @@ class AlarmList extends StatelessWidget {
                   ],
                 ),
               ),
-              // ✅ Divider도 InkWell 안쪽에 포함 → 알림 하나 전체가 클릭 영역
               const Divider(
                 color: Color.fromARGB(255, 235, 235, 235),
                 height: 1,
