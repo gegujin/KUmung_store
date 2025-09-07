@@ -16,23 +16,18 @@ import '../features/delivery/ku_delivery_list_screen.dart';
 import '../features/delivery/ku_delivery_alert_screen.dart';
 import '../features/delivery/ku_delivery_detail_screen.dart';
 import '../features/delivery/delivery_status_screen.dart';
-import '../features/mypage/heart_screen.dart'; // ✅ 관심목록
-
-//import '../features/settings/settings_screen.dart';
-//import '../features/delivery/request_delivery_screen.dart';
+import '../features/mypage/heart_screen.dart'; // ✅ 관심목록(탭2 루트)
 import '../features/mypage/mypage_screen.dart';
+
+// ⬇️ 마이페이지 서브(GoRouter로 일원화)
+import '../features/friend/friend_screen.dart';
+import '../features/mypage/recent_post_screen.dart';
+import '../features/mypage/sell_screen.dart';
+import '../features/mypage/buy_screen.dart';
 
 // Models
 import '../models/post.dart';
 
-// Services (예: DI로 주입받아도 됨)
-/*
-import '../features/auth/auth_service.dart';
-import '../features/product/product_service.dart';
-import '../features/chat/chat_service.dart';
-*/
-
-/// 결제 플로우에 필요한 인자
 class SecurePayArgs {
   final String roomId;
   final String productId;
@@ -61,19 +56,6 @@ class SecurePayArgs {
   });
 }
 
-/// 외부에서 라우터를 만들 때 필요한 의존성 (아직 없는 파일은 주석처리)
-/*
-class AppRouter {
-  final AuthService auth;
-  final ProductService products;
-  final ChatService chats;
-
-  AppRouter({
-    required this.auth,
-    required this.products,
-    required this.chats,
-  });
-*/
 final GoRouter router = GoRouter(
   debugLogDiagnostics: kDebugMode,
   initialLocation: '/',
@@ -165,7 +147,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/favorites',
       name: 'favorites',
-      builder: (_, __) => const HeartPage(), // ✅ HeartPage로 연결
+      builder: (_, __) => const HeartPage(), // ✅ 탭2 루트
     ),
     GoRoute(
       path: '/pay/secure/:roomId/:productId',
@@ -219,8 +201,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/delivery/feed',
       name: 'deliveryFeed',
-      builder: (_, __) =>
-          const KuDeliveryFeedScreen(), // ku_delivery_list_screen.dart
+      builder: (_, __) => const KuDeliveryFeedScreen(),
     ),
     GoRoute(
       path: '/delivery/alerts',
@@ -243,57 +224,37 @@ final GoRouter router = GoRouter(
         return DeliveryStatusScreen(args: args);
       },
     ),
+
+    // ✅ 마이페이지 + 중첩 서브 라우트(전면 GoRouter)
     GoRoute(
       path: '/mypage',
       name: 'mypage',
       builder: (_, __) => const MyPage(),
+      routes: [
+        GoRoute(
+          path: 'friends',
+          name: 'friends',
+          builder: (_, __) => const FriendsPage(),
+        ),
+        GoRoute(
+          path: 'recent',
+          name: 'recentPosts',
+          builder: (_, __) => const RecentPostPage(),
+        ),
+        GoRoute(
+          path: 'sell',
+          name: 'sellHistory',
+          builder: (_, __) => const SellPage(),
+        ),
+        GoRoute(
+          path: 'buy',
+          name: 'buyHistory',
+          builder: (_, __) => const BuyPage(),
+        ),
+      ],
     ),
-
-    /*
-    GoRoute(
-      path: '/delivery/request',
-      name: 'deliveryRequest',
-      builder: (context, state) => const RequestDeliveryScreen(),
-    ),
-    GoRoute(
-      path: '/mypage',
-      name: 'mypage',
-      builder: (_, __) => const MyPageScreen(),
-    ),
-    GoRoute(
-      path: '/settings',
-      name: 'settings',
-      builder: (_, __) => const SettingsScreen(),
-    ),*/
-    /*
-    GoRoute(
-      path: '/login',
-      name: 'login',
-      builder: (context, state) {
-        final ret = state.uri.queryParameters['return'];
-        return LoginScreen(returnTo: ret);
-      },
-    ),
-    */
   ],
   errorBuilder: (_, state) => Scaffold(
     body: Center(child: Text('라우팅 오류: ${state.error}')),
   ),
 );
-
-/*
-  bool _requiresAuth(String path) {
-    const protected = [
-      '/product/edit',
-      '/trade',
-      '/trade/confirm',
-      '/trade/payment',
-      '/pay',
-      '/chat',
-      '/delivery',
-      '/mypage',
-    ];
-    return protected.any((p) => path.startsWith(p));
-  }
-}
-*/

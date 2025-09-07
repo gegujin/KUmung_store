@@ -3,8 +3,20 @@ cmake_minimum_required(VERSION 3.14)
 
 set(EPHEMERAL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ephemeral")
 
+# ── SAFETY GUARD ───────────────────────────────────────────────────────────────
+# Flutter가 생성하는 파일이 없을 경우, 명확한 안내 후 중단합니다.
+if (NOT EXISTS "${EPHEMERAL_DIR}/generated_config.cmake")
+  message(STATUS "Flutter Windows ephemeral not found:")
+  message(STATUS "  ${EPHEMERAL_DIR}/generated_config.cmake")
+  message(STATUS "If you are not building the Windows desktop target (e.g., running on Chrome),")
+  message(STATUS "disable CMake auto-configure in your IDE to avoid this check.")
+  message(FATAL_ERROR
+    "Missing generated_config.cmake. Run 'flutter run -d windows' or 'flutter build windows' "
+    "from the project root to generate Windows ephemeral files.")
+endif()
+
 # Configuration provided via flutter tool.
-include(${EPHEMERAL_DIR}/generated_config.cmake)
+include("${EPHEMERAL_DIR}/generated_config.cmake")
 
 # TODO: Move the rest of this into files in ephemeral. See
 # https://github.com/flutter/flutter/issues/57146.

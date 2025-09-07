@@ -1,21 +1,22 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-class ProfileEditPage extends StatefulWidget {
-  const ProfileEditPage({super.key});
+class EditProfilePage extends StatefulWidget {
+  const EditProfilePage({super.key});
 
   @override
-  State<ProfileEditPage> createState() => _ProfileEditPageState();
+  State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
-class _ProfileEditPageState extends State<ProfileEditPage> {
-  File? _profileImage; // 갤러리에서 선택한 이미지 파일
+class _EditProfilePageState extends State<EditProfilePage> {
+  final TextEditingController _nameController = TextEditingController();
+  File? _profileImage;
 
-  // 갤러리에서 이미지 선택
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
 
     if (pickedFile != null) {
       setState(() {
@@ -26,26 +27,61 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    final mainColor = Theme.of(context).colorScheme.primary; // Theme 색상 적용
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("프로필 변경"),
+        title: const Text("프로필 수정", style: TextStyle(color: Colors.white)),
+        backgroundColor: mainColor,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start, // 위쪽 배치
           children: [
-            const SizedBox(height: 40), // 앱바와 이미지 사이 여백
-            CircleAvatar(
-              radius: 70,
-              backgroundImage: _profileImage != null
-                  ? FileImage(_profileImage!)
-                  : const AssetImage("assets/default_profile.png")
-                      as ImageProvider,
+            GestureDetector(
+              onTap: _pickImage,
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.grey[300],
+                backgroundImage:
+                    _profileImage != null ? FileImage(_profileImage!) : null,
+                child: _profileImage == null
+                    ? const Icon(
+                        Icons.camera_alt,
+                        size: 40,
+                        color: Colors.white,
+                      )
+                    : null,
+              ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: const Text("프로필 사진 변경"),
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: "아이디 변경",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 30),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: mainColor),
+                onPressed: () {
+                  String newName = _nameController.text;
+                  Navigator.pop(context, {
+                    "name": newName,
+                    "profileImage": _profileImage,
+                  });
+                },
+                child: const Text("저장", style: TextStyle(color: Colors.white)),
+              ),
             ),
           ],
         ),

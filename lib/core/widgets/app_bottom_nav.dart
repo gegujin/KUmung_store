@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:kumeong_store/features/chat/chat_list_screen.dart';
-import 'package:kumeong_store/features/mypage/mypage_screen.dart';
-import 'package:kumeong_store/features/mypage/heart_screen.dart'; // ✅ 관심목록
-
 /// 공용 하단바
 /// - currentIndex: 0 홈 / 1 채팅 / 2 관심목록 / 3 마이페이지
 class AppBottomNav extends StatelessWidget {
-  const AppBottomNav({
-    super.key,
-    required this.currentIndex,
-  });
-
+  const AppBottomNav({super.key, required this.currentIndex});
   final int currentIndex;
+
+  // 루트 라우트 네임 매핑(프로젝트에 맞게 유지)
+  static const _routeNames = ['home', 'chatList', 'favorites', 'mypage'];
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
-      selectedItemColor: const Color(0xFF2E7D6B), // 선택 아이템 색
+      selectedItemColor: const Color(0xFF2E7D6B),
       unselectedItemColor: Colors.grey,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
@@ -29,31 +24,8 @@ class AppBottomNav extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: '마이페이지'),
       ],
       onTap: (index) {
-        if (index == currentIndex) return; // 같은 탭이면 무시
-
-        switch (index) {
-          case 0: // 홈
-            context.goNamed('home'); // 홈 라우트 이름 맞게 변경 필요
-            break;
-          case 1: // 채팅
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ChatListScreen()),
-            );
-            break;
-          case 2: // 관심목록
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const HeartPage()),
-            );
-            break;
-          case 3: // 마이페이지
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const MyPage()),
-            );
-            break;
-        }
+        // ✅ 어떤 탭을 눌러도 해당 탭의 루트로 이동(같은 탭이어도 예외 없이 이동)
+        context.goNamed(_routeNames[index]);
       },
     );
   }

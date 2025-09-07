@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kumeong_store/features/chat/chat_list_screen.dart';
 import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
+import 'package:go_router/go_router.dart';
 import '../mypage/point_screen.dart';
 import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
@@ -9,12 +10,10 @@ import '../mypage/heart_screen.dart';
 import '../mypage/recent_post_screen.dart';
 import '../mypage/sell_screen.dart';
 import '../mypage/buy_screen.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart'; // ⭐ 추가
 
 class MyPage extends StatelessWidget {
-  // ⭐ 서버에서 받아올 별점 값 (지금은 기본값 4.5)
-  final double rating;
-
-  const MyPage({super.key, this.rating = 4.5});
+  const MyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +24,6 @@ class MyPage extends StatelessWidget {
         color: Color.fromARGB(255, 226, 226, 226),
         height: 1,
       );
-    }
-
-    // ⭐ 별 아이콘 생성 함수
-    List<Widget> _buildStars(double rating) {
-      List<Widget> stars = [];
-      for (int i = 1; i <= 5; i++) {
-        if (i <= rating.floor()) {
-          stars.add(const Icon(Icons.star, color: Colors.amber, size: 28));
-        } else if (i - rating <= 0.5) {
-          stars.add(const Icon(Icons.star_half, color: Colors.amber, size: 28));
-        } else {
-          stars.add(
-              const Icon(Icons.star_border, color: Colors.amber, size: 28));
-        }
-      }
-      return stars;
     }
 
     return Scaffold(
@@ -78,21 +61,23 @@ class MyPage extends StatelessWidget {
             const Text('사용자 이름', style: TextStyle(fontSize: 20)),
             const SizedBox(height: 10),
 
-            // ⭐ 별점 표시 영역
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ..._buildStars(rating),
-                const SizedBox(width: 8),
-                Text(
-                  "$rating / 5.0",
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+            // ✅ 프로필 수정 버튼 제거 → 별점 표시로 교체 (flutter_rating_bar 사용)
+            Center(
+              child: RatingBarIndicator(
+                rating: 3.5, // ← 필요에 따라 값만 변경
+                itemCount: 5,
+                itemSize: 28.0,
+                unratedColor: Color(0xFFE0E0E0), // 회색 빈별
+                itemBuilder: (_, __) => const Icon(
+                  Icons.star,
+                  color: Color(0xFFF4A623), // 주황 별
                 ),
-              ],
+                direction: Axis.horizontal,
+              ),
             ),
 
             const SizedBox(height: 20),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -123,6 +108,8 @@ class MyPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
+
+            // ▼ 아래 리스트 타일들은 기존 그대로
             ListTile(
               leading: const Icon(Icons.group),
               title: const Text('친구목록'),
