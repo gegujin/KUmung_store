@@ -4,9 +4,17 @@ import 'package:go_router/go_router.dart'; // ⬅️ 추가!
 // 상세 화면들
 import '../settings/edit_profile_screen.dart';
 import '../settings/password_change_screen.dart';
+<<<<<<< HEAD
 import '../settings/email_check_screen.dart';
 // 로그인 화면 (라우터에서 name: 'login' 으로 등록됨)
 import '../auth/login_screen.dart';
+=======
+// import '../settings/email_check_screen.dart';
+import '../settings/edit_profile_screen.dart';
+import '../settings/nickname_change_screen.dart';
+import '../settings/delete_screen.dart';
+import '../settings/logout_screen.dart';
+>>>>>>> 50c8863692d27ade501412236666808ba34bc811
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -33,7 +41,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     final mainColor = Theme.of(context).colorScheme.primary;
+=======
+    final mainColor = Theme.of(context).colorScheme.primary; // 테마 색상 적용
+    final sectionTitleStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+      color: Colors.grey[600],
+    );
+>>>>>>> 50c8863692d27ade501412236666808ba34bc811
 
     return Scaffold(
       appBar: AppBar(
@@ -44,22 +61,31 @@ class _SettingsPageState extends State<SettingsPage> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: ListView(
         children: [
+<<<<<<< HEAD
           const SizedBox(height: 8),
 
           // ───────────────── 1) 알림설정
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
             child: Text('알림설정', style: _sectionStyle),
+=======
+          const SizedBox(height: 10),
+
+          // 🔹 알림 설정
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text("알림 설정", style: sectionTitleStyle),
+>>>>>>> 50c8863692d27ade501412236666808ba34bc811
           ),
           SwitchListTile(
             title: const Text('알림 받기'),
             value: _notificationsEnabled,
             onChanged: (v) => setState(() => _notificationsEnabled = v),
           ),
+<<<<<<< HEAD
           SwitchListTile(
             title: const Text('배달 상태 알림'),
             subtitle: const Text('픽업/이동 중/도착 등 상태 업데이트'),
@@ -143,12 +169,40 @@ class _SettingsPageState extends State<SettingsPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const EditProfilePage()),
+=======
+          const Divider(),
+
+          // 🔹 계정 관리
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text("계정 관리", style: sectionTitleStyle),
+          ),
+          ListTile(
+            title: const Text("프로필 변경"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileEditPage()),
+>>>>>>> 50c8863692d27ade501412236666808ba34bc811
               );
             },
           ),
           ListTile(
+<<<<<<< HEAD
             title: const Text('비밀번호 변경'),
             trailing: const Icon(Icons.chevron_right),
+=======
+            title: const Text("닉네임 변경"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const NicknameChangePage()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text("비밀번호 변경"),
+>>>>>>> 50c8863692d27ade501412236666808ba34bc811
             onTap: () {
               Navigator.push(
                 context,
@@ -156,6 +210,7 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
           ),
+<<<<<<< HEAD
           const Divider(height: 1),
 
           // ───────────────── 4) 고객지원
@@ -178,10 +233,26 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () async {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('로그가 준비되면 전송 기능과 연결할게요.')),
+=======
+          const Divider(),
+
+          // 🔹 기타
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text("기타", style: sectionTitleStyle),
+          ),
+          ListTile(
+            title: const Text("회원 탈퇴"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AccountDeletePage()),
+>>>>>>> 50c8863692d27ade501412236666808ba34bc811
               );
             },
           ),
           ListTile(
+<<<<<<< HEAD
             title: const Text('앱 버전 / 업데이트 확인'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
@@ -289,6 +360,16 @@ class _SettingsPageState extends State<SettingsPage> {
             onPressed: () => Navigator.of(ctx).pop(true), // ← ctx 사용
             child: const Text('확인'),
           ),
+=======
+            title: const Text("로그아웃"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LogoutPage()),
+              );
+            },
+          ),
+>>>>>>> 50c8863692d27ade501412236666808ba34bc811
         ],
       ),
     );
