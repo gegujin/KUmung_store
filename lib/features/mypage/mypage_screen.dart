@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kumeong_store/features/chat/chat_list_screen.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart'; // ⭐ 별점 위젯
 import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
-import 'package:go_router/go_router.dart';
+
+// Screens
 import '../mypage/point_screen.dart';
 import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
@@ -10,39 +11,22 @@ import '../mypage/heart_screen.dart';
 import '../mypage/recent_post_screen.dart';
 import '../mypage/sell_screen.dart';
 import '../mypage/buy_screen.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart'; // ⭐ 추가
 
 class MyPage extends StatelessWidget {
-  // ⭐ 서버에서 받아올 별점 값 (지금은 기본값 4.5)
+  /// 서버에서 받아올 별점 값 (기본 4.5)
   final double rating;
 
   const MyPage({super.key, this.rating = 4.5});
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = Theme.of(context).colorScheme.primary; // Theme 색상 적용
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     Widget _buildDivider() {
       return const Divider(
         color: Color.fromARGB(255, 226, 226, 226),
         height: 1,
       );
-    }
-
-    // ⭐ 별 아이콘 생성 함수
-    List<Widget> _buildStars(double rating) {
-      List<Widget> stars = [];
-      for (int i = 1; i <= 5; i++) {
-        if (i <= rating.floor()) {
-          stars.add(const Icon(Icons.star, color: Colors.amber, size: 28));
-        } else if (i - rating <= 0.5) {
-          stars.add(const Icon(Icons.star_half, color: Colors.amber, size: 28));
-        } else {
-          stars.add(
-              const Icon(Icons.star_border, color: Colors.amber, size: 28));
-        }
-      }
-      return stars;
     }
 
     return Scaffold(
@@ -52,10 +36,10 @@ class MyPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const HomePage()),
-            );
+            // 뒤로가기: 이전 화면으로 복귀
+            Navigator.pop(context);
+            // 만약 '홈으로 이동'이 의도라면 위 한 줄 대신 아래로 교체:
+            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
           },
         ),
         title: const Text('마이페이지', style: TextStyle(color: Colors.white)),
@@ -65,7 +49,7 @@ class MyPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const SettingsPage()),
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
               );
             },
           ),
@@ -80,34 +64,25 @@ class MyPage extends StatelessWidget {
             const Text('사용자 이름', style: TextStyle(fontSize: 20)),
             const SizedBox(height: 10),
 
-<<<<<<< HEAD
-            // ✅ 프로필 수정 버튼 제거 → 별점 표시로 교체 (flutter_rating_bar 사용)
+            // ⭐ 별점 표시(Indicator)
             Center(
               child: RatingBarIndicator(
-                rating: 3.5, // ← 필요에 따라 값만 변경
+                rating: rating,              // 전달받은 값 사용
                 itemCount: 5,
                 itemSize: 28.0,
-                unratedColor: Color(0xFFE0E0E0), // 회색 빈별
+                unratedColor: const Color(0xFFE0E0E0),
                 itemBuilder: (_, __) => const Icon(
                   Icons.star,
-                  color: Color(0xFFF4A623), // 주황 별
+                  color: Color(0xFFF4A623),
                 ),
                 direction: Axis.horizontal,
               ),
-=======
-            // ⭐ 별점 표시 영역
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ..._buildStars(rating),
-                const SizedBox(width: 8),
-                Text(
-                  "$rating / 5.0",
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ],
->>>>>>> 50c8863692d27ade501412236666808ba34bc811
+            ),
+
+            const SizedBox(height: 4),
+            Text(
+              "$rating / 5.0",
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
 
             const SizedBox(height: 20),
@@ -143,7 +118,7 @@ class MyPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // ▼ 아래 리스트 타일들은 기존 그대로
+            // ▼ 목록
             ListTile(
               leading: const Icon(Icons.group),
               title: const Text('친구목록'),
@@ -194,7 +169,7 @@ class MyPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const BuyPage()), // 연결
+                  MaterialPageRoute(builder: (_) => const BuyPage()),
                 );
               },
             ),
