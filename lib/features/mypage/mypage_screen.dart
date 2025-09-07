@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:kumeong_store/features/chat/chat_list_screen.dart';
 import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
+import 'package:go_router/go_router.dart';
 import '../mypage/point_screen.dart';
 import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
-import '../mypage/edit_profile_screen.dart';
 import '../friend/friend_screen.dart';
 import '../mypage/heart_screen.dart';
 import '../mypage/recent_post_screen.dart';
 import '../mypage/sell_screen.dart';
 import '../mypage/buy_screen.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart'; // ⭐ 추가
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
@@ -59,35 +60,24 @@ class MyPage extends StatelessWidget {
             const SizedBox(height: 10),
             const Text('사용자 이름', style: TextStyle(fontSize: 20)),
             const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const EditProfilePage()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  elevation: 0,
-                  backgroundColor: mainColor, // Theme 색상 적용
+
+            // ✅ 프로필 수정 버튼 제거 → 별점 표시로 교체 (flutter_rating_bar 사용)
+            Center(
+              child: RatingBarIndicator(
+                rating: 3.5, // ← 필요에 따라 값만 변경
+                itemCount: 5,
+                itemSize: 28.0,
+                unratedColor: Color(0xFFE0E0E0), // 회색 빈별
+                itemBuilder: (_, __) => const Icon(
+                  Icons.star,
+                  color: Color(0xFFF4A623), // 주황 별
                 ),
-                child: const Text(
-                  '프로필 수정',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                direction: Axis.horizontal,
               ),
             ),
+
             const SizedBox(height: 20),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -118,6 +108,8 @@ class MyPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
+
+            // ▼ 아래 리스트 타일들은 기존 그대로
             ListTile(
               leading: const Icon(Icons.group),
               title: const Text('친구목록'),

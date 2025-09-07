@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:kumeong_store/features/chat/chat_list_screen.dart';
-import 'package:kumeong_store/features/mypage/mypage_screen.dart';
-import 'package:kumeong_store/features/mypage/heart_screen.dart'; // ✅ 관심목록
-
 /// 공용 하단바
 /// - currentIndex: 0 홈 / 1 채팅 / 2 관심목록 / 3 마이페이지
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({super.key, required this.currentIndex});
   final int currentIndex;
+
+  // 루트 라우트 네임 매핑(프로젝트에 맞게 유지)
+  static const _routeNames = ['home', 'chatList', 'favorites', 'mypage'];
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +24,8 @@ class AppBottomNav extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: '마이페이지'),
       ],
       onTap: (index) {
-        if (index == currentIndex) return; // 같은 탭이면 무시
-        switch (index) {
-          case 0: context.goNamed('home'); break;
-          case 1: context.goNamed('chatList'); break;
-          case 2: context.goNamed('favorites'); break;
-          case 3: context.goNamed('mypage'); break;
-        }
+        // ✅ 어떤 탭을 눌러도 해당 탭의 루트로 이동(같은 탭이어도 예외 없이 이동)
+        context.goNamed(_routeNames[index]);
       },
     );
   }
