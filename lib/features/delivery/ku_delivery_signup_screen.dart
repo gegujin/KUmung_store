@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kumeong_store/features/delivery/ku_delivery_list_screen.dart';
 
+// KU대리 브랜드 색상
+const Color kuInfo = Color(0xFF147AD6);
+
 class KuDeliverySignupPage extends StatefulWidget {
   const KuDeliverySignupPage({super.key});
 
@@ -35,7 +38,7 @@ class _KuDeliverySignupPageState extends State<KuDeliverySignupPage> {
   // 인증번호 확인
   void _verifyCode() {
     setState(() {
-      isVerified = true; // 입력한 값 상관없이 인증 완료 처리
+      isVerified = true;
     });
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("이메일 인증이 완료되었습니다.")),
@@ -73,15 +76,19 @@ class _KuDeliverySignupPageState extends State<KuDeliverySignupPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("KU대리 회원가입"),
+        backgroundColor: kuInfo,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
           children: [
+            // 이메일 인증
+            const SizedBox(height: 20),
             const Text(
               "학교 이메일 인증",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(
@@ -91,9 +98,13 @@ class _KuDeliverySignupPageState extends State<KuDeliverySignupPage> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: _sendCode,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kuInfo,
+              ),
               child: const Text("인증번호 발송"),
             ),
             if (isCodeSent) ...[
+              const SizedBox(height: 10),
               TextField(
                 controller: _codeController,
                 decoration: const InputDecoration(labelText: "인증번호 입력"),
@@ -101,50 +112,69 @@ class _KuDeliverySignupPageState extends State<KuDeliverySignupPage> {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _verifyCode,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: kuInfo,
+                ),
                 child: const Text("인증하기"),
               ),
             ],
+
+            // 이동수단 선택
             const SizedBox(height: 30),
             const Text(
               "이동수단 선택",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 10),
             RadioListTile<String>(
               title: const Text("도보"),
               value: "도보",
               groupValue: selectedTransport,
-              onChanged: (value) {
-                setState(() {
-                  selectedTransport = value;
-                });
-              },
+              onChanged: (value) => setState(() => selectedTransport = value),
             ),
             RadioListTile<String>(
               title: const Text("자전거"),
               value: "자전거",
               groupValue: selectedTransport,
-              onChanged: (value) {
-                setState(() {
-                  selectedTransport = value;
-                });
-              },
+              onChanged: (value) => setState(() => selectedTransport = value),
             ),
             RadioListTile<String>(
               title: const Text("오토바이"),
               value: "오토바이",
               groupValue: selectedTransport,
-              onChanged: (value) {
-                setState(() {
-                  selectedTransport = value;
-                });
-              },
+              onChanged: (value) => setState(() => selectedTransport = value),
             ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: _completeSignup,
-              child: const Text("회원가입 완료"),
+            RadioListTile<String>(
+              title: const Text("기타"),
+              value: "기타",
+              groupValue: selectedTransport,
+              onChanged: (value) => setState(() => selectedTransport = value),
             ),
+            const SizedBox(height: 120),
           ],
+        ),
+      ),
+
+      // 회원가입 완료 버튼 하단 고정
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        color: Colors.white,
+        child: SizedBox(
+          height: 56,
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: _completeSignup,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kuInfo,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text(
+              "회원가입 완료",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
       ),
     );
