@@ -2,19 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
-// import 'package:kumeong_store/core/theme.dart';
 import 'ku_delivery_detail_screen.dart';
 import 'package:kumeong_store/models/latlng.dart' as model;
 
-/// 배달(라이더) 피드 화면
-/// - 알림 아이콘
-/// - 배달 카드 리스트
-/// - 하단: 정렬 설명 + 필터 버튼
-/// - 하단 네비: 메인화면/채팅/마이페이지 (앞방향 네비만)
+const Color kuInfo = Color(0xFF147AD6); // KU 파란색 강조 컬러
 
-const Color kuInfo = Color(0xFF147AD6); // ✅ KU 파란색 강조 컬러
-
-/// 배달(라이더) 피드 화면
 class KuDeliveryFeedScreen extends StatefulWidget {
   const KuDeliveryFeedScreen({super.key});
 
@@ -25,7 +17,6 @@ class KuDeliveryFeedScreen extends StatefulWidget {
 class _KuDeliveryFeedScreenState extends State<KuDeliveryFeedScreen> {
   final _fmt = NumberFormat.decimalPattern('ko_KR');
 
-  /// TODO(연동): 서버에서 받아올 리스트
   List<_DeliveryItem> items = [
     _DeliveryItem(
       categoryTop: '의류',
@@ -52,7 +43,6 @@ class _KuDeliveryFeedScreenState extends State<KuDeliveryFeedScreen> {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-
     final sorted = [...items]..sort((a, b) {
         switch (sort) {
           case _Sort.distance:
@@ -68,23 +58,24 @@ class _KuDeliveryFeedScreenState extends State<KuDeliveryFeedScreen> {
         backgroundColor: kuInfo,
         foregroundColor: Colors.white,
         title: const Text('배달 창'),
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.home_rounded, color: Colors.white),
+          onPressed: () => context.goNamed('home'), // HomePage 이동
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () => context.pushNamed('kuDeliveryAlerts'),
-          )
+          ),
         ],
       ),
-
       body: ListView.separated(
-        padding: const EdgeInsets.only(top: 12, bottom: 120),
+        padding: const EdgeInsets.only(top: 12, bottom: 24),
         itemCount: sorted.length + 1,
         separatorBuilder: (_, __) =>
             const Divider(height: 1, color: Colors.grey),
         itemBuilder: (context, idx) {
           if (idx == sorted.length) {
-            // 하단: 정렬 설명 + 필터 버튼
             return Padding(
               padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
               child: Row(
@@ -123,7 +114,6 @@ class _KuDeliveryFeedScreenState extends State<KuDeliveryFeedScreen> {
               onTap: () {
                 final minutesAgo =
                     DateTime.now().difference(it.postedAt).inMinutes;
-
                 final args = KuDeliveryDetailArgs(
                   title: it.categoryTop,
                   sellerName: '거래자',
@@ -142,42 +132,6 @@ class _KuDeliveryFeedScreenState extends State<KuDeliveryFeedScreen> {
             ),
           );
         },
-      ),
-
-      // 하단 네비게이션
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(top: BorderSide(color: Colors.grey.shade300)),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavButton(
-                icon: Icons.home_rounded,
-                label: '메인화면',
-                onTap: () => context.goNamed('home'),
-              ),
-              _NavButton(
-                icon: Icons.chat_bubble_outline_rounded,
-                label: '채팅',
-                onTap: () => context.goNamed('chatList'),
-              ),
-              _NavButton(
-                icon: Icons.person_outline_rounded,
-                label: '마이 페이지',
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('마이페이지는 추후 연결됩니다.')),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -265,7 +219,6 @@ class _DeliveryCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 썸네일
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
@@ -282,13 +235,10 @@ class _DeliveryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-
-            // 정보
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 카테고리 | 등록 시간
                   Row(
                     children: [
                       Text(categoryTop,
@@ -301,8 +251,6 @@ class _DeliveryCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 6),
-
-                  // 출발 / 도착
                   Wrap(
                     spacing: 8,
                     runSpacing: 4,
@@ -312,14 +260,12 @@ class _DeliveryCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 10),
-
-                  // 가격
                   Text(
                     priceText,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: kuInfo, // ✅ 가격 강조
+                      color: kuInfo,
                     ),
                   ),
                 ],
@@ -342,33 +288,6 @@ class _DeliveryCard extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(color: kuInfo, fontWeight: FontWeight.w500),
-      ),
-    );
-  }
-}
-
-class _NavButton extends StatelessWidget {
-  const _NavButton(
-      {required this.icon, required this.label, required this.onTap});
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: kuInfo),
-            const SizedBox(height: 4),
-            Text(label, style: const TextStyle(color: kuInfo, fontSize: 12)),
-          ],
-        ),
       ),
     );
   }
