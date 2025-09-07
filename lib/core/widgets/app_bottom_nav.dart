@@ -7,7 +7,7 @@ class AppBottomNav extends StatelessWidget {
   const AppBottomNav({super.key, required this.currentIndex});
   final int currentIndex;
 
-  // 루트 라우트 네임 매핑(프로젝트에 맞게 유지)
+  // 루트 라우트 네임 매핑
   static const _routeNames = ['home', 'chatList', 'favorites', 'mypage'];
 
   @override
@@ -24,7 +24,8 @@ class AppBottomNav extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: '마이페이지'),
       ],
       onTap: (index) {
-        // ✅ 어떤 탭을 눌러도 해당 탭의 루트로 이동(같은 탭이어도 예외 없이 이동)
+        // ✅ 어떤 탭을 눌러도 해당 탭의 "루트" 네임드 라우트로 이동
+        //    (서브페이지에 있어도 항상 루트로 점프)
         context.goNamed(_routeNames[index]);
       },
     );

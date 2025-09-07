@@ -1,32 +1,36 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+// Auth
 import 'package:kumeong_store/features/auth/login_screen.dart';
 
-// Screens
-import '../features/home/home_screen.dart';
-import '../features/product/product_detail_screen.dart';
-import '../features/product/product_edit_screen.dart';
-import '../features/chat/chat_list_screen.dart';
-import '../features/chat/chat_room_screen.dart';
-import '../features/trade/trade_confirm_screen.dart';
-import '../features/trade/payment_method_screen.dart';
-import '../features/trade/secure_payment_screen.dart';
-import '../features/delivery/ku_delivery_list_screen.dart';
-import '../features/delivery/ku_delivery_alert_screen.dart';
-import '../features/delivery/ku_delivery_detail_screen.dart';
-import '../features/delivery/delivery_status_screen.dart';
-import '../features/mypage/heart_screen.dart'; // ✅ 관심목록(탭2 루트)
-import '../features/mypage/mypage_screen.dart';
+// 탭 루트
+import 'package:kumeong_store/features/home/home_screen.dart';            // name: 'home'
+import 'package:kumeong_store/features/chat/chat_list_screen.dart';       // name: 'chatList'
+import 'package:kumeong_store/features/mypage/heart_screen.dart';         // name: 'favorites'
+import 'package:kumeong_store/features/mypage/mypage_screen.dart';        // name: 'mypage'
 
-// ⬇️ 마이페이지 서브(GoRouter로 일원화)
-import '../features/friend/friend_screen.dart';
-import '../features/mypage/recent_post_screen.dart';
-import '../features/mypage/sell_screen.dart';
-import '../features/mypage/buy_screen.dart';
+// 마이페이지 서브
+import 'package:kumeong_store/features/friend/friend_screen.dart';
+import 'package:kumeong_store/features/mypage/recent_post_screen.dart';
+import 'package:kumeong_store/features/mypage/sell_screen.dart';
+import 'package:kumeong_store/features/mypage/buy_screen.dart';
+
+// 기타 단독 화면들
+import 'package:kumeong_store/features/product/product_detail_screen.dart';
+import 'package:kumeong_store/features/product/product_edit_screen.dart';
+import 'package:kumeong_store/features/chat/chat_room_screen.dart';
+import 'package:kumeong_store/features/trade/trade_confirm_screen.dart';
+import 'package:kumeong_store/features/trade/payment_method_screen.dart';
+import 'package:kumeong_store/features/trade/secure_payment_screen.dart';
+import 'package:kumeong_store/features/delivery/ku_delivery_list_screen.dart';
+import 'package:kumeong_store/features/delivery/ku_delivery_alert_screen.dart';
+import 'package:kumeong_store/features/delivery/ku_delivery_detail_screen.dart';
+import 'package:kumeong_store/features/delivery/delivery_status_screen.dart';
 
 // Models
-import '../models/post.dart';
+import 'package:kumeong_store/models/post.dart';
 
 class SecurePayArgs {
   final String roomId;
@@ -60,16 +64,81 @@ final GoRouter router = GoRouter(
   debugLogDiagnostics: kDebugMode,
   initialLocation: '/',
   routes: [
+    // ───────── Auth
     GoRoute(
       path: '/',
       name: 'login',
       builder: (_, __) => const LoginPage(),
     ),
+
+    // ───────── 탭 루트: 홈
     GoRoute(
       path: '/home',
       name: 'home',
       builder: (_, __) => const HomePage(),
+      // (홈 서브가 나중에 생기면 여기에 중첩 GoRoute로 추가)
     ),
+
+    // ───────── 탭 루트: 채팅
+    GoRoute(
+      path: '/chat',
+      name: 'chatList',
+      builder: (_, __) => const ChatListScreen(),
+      routes: [
+        GoRoute(
+          path: ':roomId',
+          name: 'chatRoom',
+          builder: (context, state) {
+            final roomId = state.pathParameters['roomId']!;
+            final extras = state.extra as Map? ?? {};
+            return ChatScreen(
+              partnerName: extras['partnerName'] as String? ?? '거래자',
+              roomId: roomId,
+              isKuDelivery: extras['isKuDelivery'] as bool? ?? false,
+              securePaid: extras['securePaid'] as bool? ?? false,
+            );
+          },
+        ),
+      ],
+    ),
+
+    // ───────── 탭 루트: 관심
+    GoRoute(
+      path: '/favorites',
+      name: 'favorites',
+      builder: (_, __) => const HeartPage(),
+    ),
+
+    // ───────── 탭 루트: 마이
+    GoRoute(
+      path: '/mypage',
+      name: 'mypage',
+      builder: (_, __) => const MyPage(),
+      routes: [
+        GoRoute(
+          path: 'friends',
+          name: 'friends',
+          builder: (_, __) => const FriendsPage(),
+        ),
+        GoRoute(
+          path: 'recent',
+          name: 'recentPosts',
+          builder: (_, __) => const RecentPostPage(),
+        ),
+        GoRoute(
+          path: 'sell',
+          name: 'sellHistory',
+          builder: (_, __) => const SellPage(),
+        ),
+        GoRoute(
+          path: 'buy',
+          name: 'buyHistory',
+          builder: (_, __) => const BuyPage(),
+        ),
+      ],
+    ),
+
+    // ───────── 기타 단독 라우트들
     GoRoute(
       path: '/product/:productId',
       name: 'productDetail',
@@ -86,21 +155,17 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/product/edit/:productId',
       name: 'productEdit',
-      builder: (context, state) {
-        final productId = state.pathParameters['productId']!;
-        return ProductEditScreen(productId: productId);
-      },
+      builder: (context, state) =>
+          ProductEditScreen(productId: state.pathParameters['productId']!),
     ),
     GoRoute(
       path: '/trade/confirm',
       name: 'tradeConfirm',
       builder: (context, state) {
         final qs = state.uri.queryParameters;
-        final productId = qs['productId'];
-        final roomId = qs['roomId'];
         return TradeConfirmScreen(
-          productId: productId,
-          roomId: roomId,
+          productId: qs['productId'],
+          roomId: qs['roomId'],
         );
       },
     ),
@@ -145,18 +210,12 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/favorites',
-      name: 'favorites',
-      builder: (_, __) => const HeartPage(), // ✅ 탭2 루트
-    ),
-    GoRoute(
       path: '/pay/secure/:roomId/:productId',
       name: 'securePay',
       builder: (context, state) {
         final roomId = state.pathParameters['roomId']!;
         final productId = state.pathParameters['productId']!;
         final x = state.extra;
-
         if (x is SecurePayArgs) {
           return SecurePaymentScreen(
             roomId: x.roomId,
@@ -172,30 +231,7 @@ final GoRouter router = GoRouter(
             defaultAddress: x.defaultAddress,
           );
         }
-
-        return SecurePaymentScreen(
-          roomId: roomId,
-          productId: productId,
-        );
-      },
-    ),
-    GoRoute(
-      path: '/chat',
-      name: 'chatList',
-      builder: (_, __) => const ChatListScreen(),
-    ),
-    GoRoute(
-      path: '/chat/:roomId',
-      name: 'chatRoom',
-      builder: (context, state) {
-        final roomId = state.pathParameters['roomId']!;
-        final extras = state.extra as Map? ?? {};
-        return ChatScreen(
-          partnerName: extras['partnerName'] as String? ?? '거래자',
-          roomId: roomId,
-          isKuDelivery: extras['isKuDelivery'] as bool? ?? false,
-          securePaid: extras['securePaid'] as bool? ?? false,
-        );
+        return SecurePaymentScreen(roomId: roomId, productId: productId);
       },
     ),
     GoRoute(
@@ -211,50 +247,16 @@ final GoRouter router = GoRouter(
     GoRoute(
       name: KuDeliveryDetailScreen.routeName,
       path: '/delivery/detail',
-      builder: (context, state) {
-        final args = state.extra as KuDeliveryDetailArgs;
-        return KuDeliveryDetailScreen(args: args);
-      },
+      builder: (context, state) =>
+          KuDeliveryDetailScreen(args: state.extra as KuDeliveryDetailArgs),
     ),
     GoRoute(
       path: '/delivery/status',
       name: 'delivery-status',
-      builder: (context, state) {
-        final args = state.extra as DeliveryStatusArgs;
-        return DeliveryStatusScreen(args: args);
-      },
-    ),
-
-    // ✅ 마이페이지 + 중첩 서브 라우트(전면 GoRouter)
-    GoRoute(
-      path: '/mypage',
-      name: 'mypage',
-      builder: (_, __) => const MyPage(),
-      routes: [
-        GoRoute(
-          path: 'friends',
-          name: 'friends',
-          builder: (_, __) => const FriendsPage(),
-        ),
-        GoRoute(
-          path: 'recent',
-          name: 'recentPosts',
-          builder: (_, __) => const RecentPostPage(),
-        ),
-        GoRoute(
-          path: 'sell',
-          name: 'sellHistory',
-          builder: (_, __) => const SellPage(),
-        ),
-        GoRoute(
-          path: 'buy',
-          name: 'buyHistory',
-          builder: (_, __) => const BuyPage(),
-        ),
-      ],
+      builder: (context, state) =>
+          DeliveryStatusScreen(args: state.extra as DeliveryStatusArgs),
     ),
   ],
-  errorBuilder: (_, state) => Scaffold(
-    body: Center(child: Text('라우팅 오류: ${state.error}')),
-  ),
+  errorBuilder: (_, state) =>
+      Scaffold(body: Center(child: Text('라우팅 오류: ${state.error}'))),
 );

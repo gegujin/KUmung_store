@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart'; // ⭐ 별점 위젯
-import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart';
+import 'package:go_router/go_router.dart'; // ⬅️ 네임드 라우트 이동용
 
-// Screens
+// 필요시 유지(포인트/설정은 별도 라우트가 없다면 기존 push 사용)
 import '../mypage/point_screen.dart';
-import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
-import '../friend/friend_screen.dart';
-import '../mypage/heart_screen.dart';
-import '../mypage/recent_post_screen.dart';
-import '../mypage/sell_screen.dart';
-import '../mypage/buy_screen.dart';
 
 class MyPage extends StatelessWidget {
   /// 서버에서 받아올 별점 값 (기본 4.5)
@@ -22,12 +17,10 @@ class MyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final mainColor = Theme.of(context).colorScheme.primary;
 
-    Widget _buildDivider() {
-      return const Divider(
-        color: Color.fromARGB(255, 226, 226, 226),
-        height: 1,
-      );
-    }
+    Widget _buildDivider() => const Divider(
+          color: Color.fromARGB(255, 226, 226, 226),
+          height: 1,
+        );
 
     return Scaffold(
       appBar: AppBar(
@@ -36,10 +29,9 @@ class MyPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // 뒤로가기: 이전 화면으로 복귀
-            Navigator.pop(context);
-            // 만약 '홈으로 이동'이 의도라면 위 한 줄 대신 아래로 교체:
-            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+            // 탭 규칙에 맞춰 홈 루트로 이동시켜도 되고,
+            // 단순 뒤로가기 하고 싶으면 Navigator.pop(context)로 바꿔도 됩니다.
+            context.goNamed('home'); // ← 홈 루트로 복귀
           },
         ),
         title: const Text('마이페이지', style: TextStyle(color: Colors.white)),
@@ -47,6 +39,7 @@ class MyPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.settings, color: Colors.white),
             onPressed: () {
+              // 설정은 독립 화면이면 기존 push 사용(라우터에 등록되어 있다면 goNamed로 교체)
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const SettingsScreen()),
@@ -67,14 +60,12 @@ class MyPage extends StatelessWidget {
             // ⭐ 별점 표시(Indicator)
             Center(
               child: RatingBarIndicator(
-                rating: rating,              // 전달받은 값 사용
+                rating: rating,
                 itemCount: 5,
                 itemSize: 28.0,
                 unratedColor: const Color(0xFFE0E0E0),
-                itemBuilder: (_, __) => const Icon(
-                  Icons.star,
-                  color: Color(0xFFF4A623),
-                ),
+                itemBuilder: (_, __) =>
+                    const Icon(Icons.star, color: Color(0xFFF4A623)),
                 direction: Axis.horizontal,
               ),
             ),
@@ -82,16 +73,19 @@ class MyPage extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               "$rating / 5.0",
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              style:
+                  const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
 
             const SizedBox(height: 20),
 
+            // ▼ 포인트
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton.icon(
                   onPressed: () {
+                    // 포인트 화면이 라우터에 없다면 기존 push 유지
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const PointPage()),
@@ -118,64 +112,40 @@ class MyPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // ▼ 목록
+            // ▼ 목록 (모두 네임드 라우트로 통일)
             ListTile(
               leading: const Icon(Icons.group),
               title: const Text('친구목록'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const FriendsPage()),
-                );
-              },
+              onTap: () => context.goNamed('friends'),
             ),
             _buildDivider(),
             ListTile(
               leading: const Icon(Icons.favorite),
               title: const Text('관심목록'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HeartPage()),
-                );
-              },
+              onTap: () => context.goNamed('favorites'), // 탭2 루트로 이동
             ),
             _buildDivider(),
             ListTile(
               leading: const Icon(Icons.history),
               title: const Text('최근 본 게시글'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const RecentPostPage()),
-                );
-              },
+              onTap: () => context.goNamed('recentPosts'),
             ),
             _buildDivider(),
             ListTile(
               leading: const Icon(Icons.receipt),
               title: const Text('판매내역'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SellPage()),
-                );
-              },
+              onTap: () => context.goNamed('sellHistory'),
             ),
             _buildDivider(),
             ListTile(
               leading: const Icon(Icons.shopping_cart),
               title: const Text('구매내역'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const BuyPage()),
-                );
-              },
+              onTap: () => context.goNamed('buyHistory'),
             ),
           ],
         ),
       ),
+      // ⬇️ 하단바: 탭 인덱스 3(마이)
       bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
