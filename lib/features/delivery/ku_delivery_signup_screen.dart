@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kumeong_store/features/delivery/ku_delivery_list_screen.dart';
 
 class KuDeliverySignupPage extends StatefulWidget {
   const KuDeliverySignupPage({super.key});
@@ -33,18 +34,12 @@ class _KuDeliverySignupPageState extends State<KuDeliverySignupPage> {
 
   // 인증번호 확인
   void _verifyCode() {
-    if (_codeController.text == "123456") {
-      setState(() {
-        isVerified = true;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("이메일 인증이 완료되었습니다.")),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("인증번호가 올바르지 않습니다.")),
-      );
-    }
+    setState(() {
+      isVerified = true; // 입력한 값 상관없이 인증 완료 처리
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("이메일 인증이 완료되었습니다.")),
+    );
   }
 
   // 회원가입 완료
@@ -65,7 +60,12 @@ class _KuDeliverySignupPageState extends State<KuDeliverySignupPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("회원가입 완료! 이동수단: $selectedTransport")),
     );
-    Navigator.pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const KuDeliveryFeedScreen(),
+      ),
+    );
   }
 
   @override
