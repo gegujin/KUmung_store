@@ -4,7 +4,6 @@ import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 import '../mypage/point_screen.dart';
 import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
-import '../mypage/edit_profile_screen.dart';
 import '../friend/friend_screen.dart';
 import '../mypage/heart_screen.dart';
 import '../mypage/recent_post_screen.dart';
@@ -12,7 +11,10 @@ import '../mypage/sell_screen.dart';
 import '../mypage/buy_screen.dart';
 
 class MyPage extends StatelessWidget {
-  const MyPage({super.key});
+  // ⭐ 서버에서 받아올 별점 값 (지금은 기본값 4.5)
+  final double rating;
+
+  const MyPage({super.key, this.rating = 4.5});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,22 @@ class MyPage extends StatelessWidget {
         color: Color.fromARGB(255, 226, 226, 226),
         height: 1,
       );
+    }
+
+    // ⭐ 별 아이콘 생성 함수
+    List<Widget> _buildStars(double rating) {
+      List<Widget> stars = [];
+      for (int i = 1; i <= 5; i++) {
+        if (i <= rating.floor()) {
+          stars.add(const Icon(Icons.star, color: Colors.amber, size: 28));
+        } else if (i - rating <= 0.5) {
+          stars.add(const Icon(Icons.star_half, color: Colors.amber, size: 28));
+        } else {
+          stars.add(
+              const Icon(Icons.star_border, color: Colors.amber, size: 28));
+        }
+      }
+      return stars;
     }
 
     return Scaffold(
@@ -59,34 +77,21 @@ class MyPage extends StatelessWidget {
             const SizedBox(height: 10),
             const Text('사용자 이름', style: TextStyle(fontSize: 20)),
             const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const EditProfilePage()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  elevation: 0,
-                  backgroundColor: mainColor, // Theme 색상 적용
+
+            // ⭐ 별점 표시 영역
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ..._buildStars(rating),
+                const SizedBox(width: 8),
+                Text(
+                  "$rating / 5.0",
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                child: const Text(
-                  '프로필 수정',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              ],
             ),
+
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
