@@ -5,7 +5,7 @@ class IdFindPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ 앱 전체에서 사용하는 테마 색 가져오기
+    // 테마 색
     final mainColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
@@ -28,7 +28,7 @@ class IdFindPage extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: mainColor,
-                minimumSize: const Size(double.infinity, 45),
+                minimumSize: const Size(double.infinity, 55),
               ),
               onPressed: () {
                 // 지금은 프론트만 → AlertDialog 띄우기

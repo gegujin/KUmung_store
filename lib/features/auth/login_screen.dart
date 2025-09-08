@@ -69,7 +69,7 @@ class LoginPage extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainColor,
-                  minimumSize: const Size(double.infinity, 45),
+                  minimumSize: const Size(double.infinity, 55),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -82,7 +82,7 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 10),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 45),
+                  minimumSize: const Size(double.infinity, 55),
                   side: BorderSide(color: mainColor),
                 ),
                 onPressed: () {

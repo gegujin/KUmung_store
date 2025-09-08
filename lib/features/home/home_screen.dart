@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kumeong_store/features/chat/chat_list_screen.dart';
 import 'package:kumeong_store/features/delivery/ku_delivery_signup_screen.dart';
-import 'package:kumeong_store/models/post.dart'; // demoProduct 사용
-import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
+import 'package:kumeong_store/models/post.dart';
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart';
 import '../product/product_list_screen.dart';
 import '../home/alarm_screen.dart';
-import '../mypage/mypage_screen.dart';
 import '../../core/theme.dart';
-import '../delivery/ku_delivery_signup_screen.dart'; // KU대리 회원가입 페이지
+import '../mypage/mypage_screen.dart';
+
+// ✅ KU 전용 색상 상수
+const Color kuInfo = Color(0xFF147AD6);
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +18,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final List<Map<String, dynamic>> allProducts = [
     {
       'title': '컴공 과잠 팝니다',
@@ -37,27 +39,10 @@ class _HomePageState extends State<HomePage> {
       'price': '500,000원',
       'isLiked': false,
     },
-    {
-      'title': '책상 나눔합니다',
-      'location': '신촌',
-      'time': '3일전',
-      'likes': 0,
-      'views': 10,
-      'price': '15,000원',
-      'isLiked': false,
-    },
-    {
-      'title': '컴공 과잠 새상품',
-      'location': '모시래마을',
-      'time': '5일전',
-      'likes': 2,
-      'views': 7,
-      'price': '35,000원',
-      'isLiked': false,
-    },
   ];
 
   String searchText = '';
+  bool _isMenuOpen = false; // ✅ 메뉴 열림/닫힘 상태
 
   void _toggleLike(int index) {
     setState(() {
@@ -71,43 +56,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  OverlayEntry? _menuEntry;
-
-  void _openFabMenu() {
-    if (_menuEntry != null) return;
-    final productId =
-        (demoProduct.id.isNotEmpty) ? demoProduct.id : 'demo-product';
-
-    _menuEntry = OverlayEntry(
-      builder: (ctx) => _FabVerticalMenu(
-        onClose: _closeFabMenu,
-        onPost: () {
-          _closeFabMenu();
-          context
-              .goNamed('productEdit', pathParameters: {'productId': productId});
-        },
-        onKuDelivery: () {
-          _closeFabMenu();
-          // KU대리 회원가입 페이지로 이동
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const KuDeliverySignupPage()),
-          );
-        },
-      ),
-    );
-    Overlay.of(context, rootOverlay: true).insert(_menuEntry!);
-  }
-
-  void _closeFabMenu() {
-    _menuEntry?.remove();
-    _menuEntry = null;
-  }
-
-  @override
-  void dispose() {
-    _closeFabMenu();
-    super.dispose();
+  void _toggleFabMenu() {
+    setState(() {
+      _isMenuOpen = !_isMenuOpen;
+    });
   }
 
   @override
@@ -144,9 +96,9 @@ class _HomePageState extends State<HomePage> {
                   fillColor: Colors.white,
                   filled: true,
                   contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5)),
+                      borderRadius: BorderRadius.circular(3)),
                 ),
                 onChanged: (v) => setState(() => searchText = v),
               ),
@@ -160,136 +112,124 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: filteredProducts.length,
-        itemBuilder: (_, index) {
-          final product = filteredProducts[index];
-          return InkWell(
-            onTap: () {
-              context.goNamed('productDetail',
-                  pathParameters: {'productId': productId}, extra: demoProduct);
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(width: 80, height: 80, color: Colors.grey[300]),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        children: [
+          // 상품 리스트
+          ListView.builder(
+            itemCount: filteredProducts.length,
+            itemBuilder: (_, index) {
+              final product = filteredProducts[index];
+              return InkWell(
+                onTap: () {
+                  context.goNamed('productDetail',
+                      pathParameters: {'productId': productId},
+                      extra: demoProduct);
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(width: 80, height: 80, color: Colors.grey[300]),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(product['title'],
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                  overflow: TextOverflow.ellipsis),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(product['title'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                                GestureDetector(
+                                  onTap: () => _toggleLike(index),
+                                  child: Icon(
+                                    product['isLiked']
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: product['isLiked']
+                                        ? Colors.red
+                                        : Colors.grey,
+                                    size: 22,
+                                  ),
+                                ),
+                              ],
                             ),
-                            GestureDetector(
-                              onTap: () => _toggleLike(index),
-                              child: Icon(
-                                product['isLiked']
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: product['isLiked']
-                                    ? Colors.red
-                                    : Colors.grey,
-                                size: 22,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text('${product['location']} | ${product['time']}',
-                            style: const TextStyle(color: Colors.grey)),
-                        const SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('가격 ${product['price']}'),
-                            Text(
-                                '찜 ${product['likes']} 조회수 ${product['views']}',
+                            const SizedBox(height: 4),
+                            Text('${product['location']} | ${product['time']}',
                                 style: const TextStyle(color: Colors.grey)),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('가격 ${product['price']}'),
+                                Text(
+                                    '찜 ${product['likes']} 조회수 ${product['views']}',
+                                    style: const TextStyle(color: Colors.grey)),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: mainColor,
-        onPressed: _openFabMenu,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
-    );
-  }
-}
-
-class _FabVerticalMenu extends StatelessWidget {
-  const _FabVerticalMenu({
-    required this.onClose,
-    required this.onPost,
-    required this.onKuDelivery,
-  });
-
-  final VoidCallback onClose;
-  final VoidCallback onPost;
-  final VoidCallback onKuDelivery;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: GestureDetector(
-            onTap: onClose,
-            child: Container(color: Colors.black.withOpacity(0.15)),
+                ),
+              );
+            },
           ),
-        ),
-        Positioned(
-          right: 16,
-          bottom: 92,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              _MenuCard(
+
+          // FAB 메뉴
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 250),
+            right: 16,
+            bottom: _isMenuOpen ? 100 : 80,
+            curve: Curves.easeOut,
+            child: AnimatedOpacity(
+              opacity: _isMenuOpen ? 1 : 0,
+              duration: const Duration(milliseconds: 200),
+              child: _MenuCard(
                 children: [
                   _MenuItem(
                     icon: Icons.delivery_dining,
-                    iconColor: const Color(0xFF147AD6),
+                    iconColor: kuInfo,
                     label: 'KU대리',
-                    onTap: onKuDelivery,
+                    onTap: () {
+                      _toggleFabMenu();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const KuDeliverySignupPage()),
+                      );
+                    },
                   ),
                   const Divider(height: 1, color: Color(0xFFF1F3F5)),
                   _MenuItem(
                     icon: Icons.add_box_outlined,
                     iconColor: const Color(0xFFFF6A00),
                     label: '상품 등록',
-                    onTap: onPost,
+                    onTap: () {
+                      _toggleFabMenu();
+                      context.goNamed('productEdit',
+                          pathParameters: {'productId': productId});
+                    },
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              FloatingActionButton.small(
-                heroTag: '_fab_close',
-                backgroundColor: Colors.white,
-                onPressed: onClose,
-                child: const Icon(Icons.close, color: Colors.black87),
-              ),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: mainColor,
+        onPressed: _toggleFabMenu,
+        child: Icon(_isMenuOpen ? Icons.close : Icons.add, color: Colors.white),
+      ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
     );
   }
 }
@@ -309,7 +249,10 @@ class _MenuCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: const [
             BoxShadow(
-                color: Colors.black26, blurRadius: 18, offset: Offset(0, 8)),
+              color: Colors.black26,
+              blurRadius: 20,
+              offset: Offset(0, 6),
+            ),
           ],
         ),
         padding: const EdgeInsets.symmetric(vertical: 6),

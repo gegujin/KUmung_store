@@ -150,6 +150,18 @@ class _KuDeliverySignupPageState extends State<KuDeliverySignupPage> {
               groupValue: selectedTransport,
               onChanged: (value) => setState(() => selectedTransport = value),
             ),
+            if (selectedTransport == "기타") ...[
+              const SizedBox(height: 10),
+              TextField(
+                decoration: const InputDecoration(
+                  labelText: "기타 이동수단을 입력하세요",
+                ),
+                onChanged: (value) {
+                  // 기타 입력값으로 업데이트
+                  selectedTransport = value;
+                },
+              ),
+            ],
             const SizedBox(height: 120),
           ],
         ),

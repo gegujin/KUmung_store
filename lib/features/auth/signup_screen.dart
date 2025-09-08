@@ -39,7 +39,7 @@ class SignUpPage extends StatelessWidget {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: mainColor,
-                      minimumSize: const Size(100, 40),
+                      minimumSize: const Size(100, 55),
                     ),
                     onPressed: () {},
                     child: const Text(
@@ -55,6 +55,7 @@ class SignUpPage extends StatelessWidget {
                 obscureText: true,
                 style: const TextStyle(fontSize: 16),
               ),
+              const SizedBox(height: 10),
               TextField(
                 decoration: const InputDecoration(labelText: '비밀번호 확인'),
                 obscureText: true,
@@ -64,7 +65,7 @@ class SignUpPage extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainColor,
-                  minimumSize: const Size(double.infinity, 45),
+                  minimumSize: const Size(double.infinity, 55),
                 ),
                 onPressed: () {
                   Navigator.push(

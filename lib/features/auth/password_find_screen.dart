@@ -28,7 +28,7 @@ class PasswordFindPage extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: mainColor,
-                minimumSize: const Size(double.infinity, 45),
+                minimumSize: const Size(double.infinity, 55),
               ),
               onPressed: () {
                 // 지금은 프론트만 → AlertDialog 띄우기

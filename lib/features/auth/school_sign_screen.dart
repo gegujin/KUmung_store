@@ -54,7 +54,7 @@ class SchoolSignUpPage extends StatelessWidget {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: mainColor,
-                      minimumSize: const Size(100, 40),
+                      minimumSize: const Size(100, 55),
                     ),
                     onPressed: () {},
                     child: const Text(
@@ -68,7 +68,7 @@ class SchoolSignUpPage extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainColor,
-                  minimumSize: const Size(double.infinity, 45),
+                  minimumSize: const Size(double.infinity, 55),
                 ),
                 onPressed: () {
                   Navigator.push(
