@@ -1,5 +1,8 @@
+// lib/features/mypage/heart_screen.dart
 import 'package:flutter/material.dart';
-import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
+import 'package:go_router/go_router.dart';
+import 'package:kumeong_store/core/router/route_names.dart' as R;
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바(전역으로 붙어 있으면 주석 OK)
 
 class HeartPage extends StatefulWidget {
   const HeartPage({super.key});
@@ -9,24 +12,26 @@ class HeartPage extends StatefulWidget {
 }
 
 class _HeartPageState extends State<HeartPage> {
-  // 더미 데이터 (isLiked 추가)
+  // 더미 데이터 (productId 추가)
   List<Map<String, dynamic>> likedProducts = [
     {
-      'title': '컴공 과잠 팝니다',
-      'location': '모시래마을',
+      'productId': 'p-willson-ball', // ✅ 상세 이동에 사용할 ID
+      'title': 'Willson 농구공 팝니다',
+      'location': '신촌운동장',
       'time': '2일전',
-      'likes': 5,
-      'views': 30,
-      'price': '30,000원',
+      'likes': 1,
+      'views': 5,
+      'price': '25,000원',
       'isLiked': true,
     },
     {
-      'title': '스마트폰 판매합니다',
-      'location': '중앙동',
-      'time': '1일전',
-      'likes': 8,
-      'views': 55,
-      'price': '500,000원',
+      'productId': 'p-cs-hoodie',
+      'title': '컴공 과잠 팝니다',
+      'location': '모시래마을',
+      'time': '3일전',
+      'likes': 1,
+      'views': 5,
+      'price': '30,000원',
       'isLiked': true,
     },
   ];
@@ -47,7 +52,7 @@ class _HeartPageState extends State<HeartPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = Theme.of(context).colorScheme.primary; // Theme 색상 적용
+    final mainColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       appBar: AppBar(
@@ -64,17 +69,22 @@ class _HeartPageState extends State<HeartPage> {
                 final product = likedProducts[index];
                 return InkWell(
                   onTap: () {
-                    print("${product['title']} 클릭됨 (상품 상세로 이동 예정)");
+                    // ✅ 상품 상세로 이동
+                    final productId =
+                        (product['productId'] as String?) ?? 'demo-product';
+                    context.pushNamed(
+                      R.RouteNames.productDetail,              // /home/product/:productId
+                      pathParameters: {'productId': productId},
+                      // extra: 초기 Product 객체를 넘길 경우 여기에 전달 가능
+                    );
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 상품 이미지
+                        // 상품 이미지 (더미)
                         Container(
                           width: 80,
                           height: 80,
@@ -94,7 +104,7 @@ class _HeartPageState extends State<HeartPage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      product['title']!,
+                                      product['title'] as String? ?? '',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -104,12 +114,13 @@ class _HeartPageState extends State<HeartPage> {
                                   GestureDetector(
                                     onTap: () => _toggleLike(index),
                                     child: Icon(
-                                      product['isLiked']
+                                      (product['isLiked'] as bool? ?? false)
                                           ? Icons.favorite
                                           : Icons.favorite_border,
-                                      color: product['isLiked']
-                                          ? Colors.red
-                                          : Colors.grey,
+                                      color:
+                                          (product['isLiked'] as bool? ?? false)
+                                              ? Colors.red
+                                              : Colors.grey,
                                       size: 22,
                                     ),
                                   ),

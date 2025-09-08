@@ -33,7 +33,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   String? _error;
 
   bool _creating = false; // 채팅방 생성 중
-  bool _liked = false; // 찜 토글 상태
+  bool _liked = true; // 찜 토글 상태
 
   void _toggleLike() {
     setState(() => _liked = !_liked);

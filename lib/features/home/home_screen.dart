@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       'likes': 1,
       'views': 5,
       'price': '25,000원',
-      'isLiked': false,
+      'isLiked': true,
     },
     {
       'title': '컴공 과잠 팝니다',
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       'likes': 1,
       'views': 5,
       'price': '30,000원',
-      'isLiked': false,
+      'isLiked': true,
     },
     {
       'title': '스마트폰 판매합니다',
