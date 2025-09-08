@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+// 🔧 라우트 이름 상수 가져오기
+import 'package:kumeong_store/core/router/route_names.dart';
 
 /// 공용 하단바
 /// - currentIndex: 0 홈 / 1 채팅 / 2 관심목록 / 3 마이페이지
@@ -7,8 +9,13 @@ class AppBottomNav extends StatelessWidget {
   const AppBottomNav({super.key, required this.currentIndex});
   final int currentIndex;
 
-  // 루트 라우트 네임 매핑
-  static const _routeNames = ['home', 'chatList', 'favorites', 'mypage'];
+  // 🔧 라우트 이름 매핑 수정: 'chatList' → RouteNames.chat
+  static const _routeNames = [
+    RouteNames.home,
+    RouteNames.chat,       // ✅ 이게 채팅 리스트 루트(/chat)입니다
+    RouteNames.favorites,
+    RouteNames.mypage,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +31,7 @@ class AppBottomNav extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: '마이페이지'),
       ],
       onTap: (index) {
-        // ✅ 어떤 탭을 눌러도 해당 탭의 "루트" 네임드 라우트로 이동
-        //    (서브페이지에 있어도 항상 루트로 점프)
+        // ✅ 각 탭의 루트로 점프
         context.goNamed(_routeNames[index]);
       },
     );

@@ -57,10 +57,10 @@ class _KuDeliveryFeedScreenState extends State<KuDeliveryFeedScreen> {
       appBar: AppBar(
         backgroundColor: kuInfo,
         foregroundColor: Colors.white,
-        title: const Text('배달 창'),
+        title: const Text('KU 대리'),
         leading: IconButton(
           icon: const Icon(Icons.home_rounded, color: Colors.white),
-          onPressed: () => context.goNamed('home'), // HomePage 이동
+          onPressed: () {context.goNamed('home');},
         ),
         actions: [
           IconButton(

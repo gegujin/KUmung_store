@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'core/theme.dart';
-import 'core/router.dart'; // ✅ 단일 라우터
+import 'core/router/app_router.dart'; // ✅ 새 라우터 경로로 변경
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,14 +26,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'KU멍가게',
         debugShowCheckedModeBanner: false,
-        theme: appTheme,      // ✅ theme.dart
-        routerConfig: router, // ✅ go_router 최신 스타일
+        theme: appTheme,        // ✅ theme.dart
+        routerConfig: appRouter, // ✅ app_router.dart의 GoRouter
 
-        // ↓↓↓ 만약 Flutter SDK가 낮아서 routerConfig를 못 쓴다면,
-        // 아래 3개를 주석 해제하고 routerConfig 한 줄을 주석 처리하세요.
-        // routeInformationProvider: router.routeInformationProvider,
-        // routeInformationParser: router.routeInformationParser,
-        // routerDelegate: router.routerDelegate,
+        // ↓↓↓ Flutter SDK가 낮아 routerConfig를 못 쓰면 아래 3줄 사용
+        // routeInformationProvider: appRouter.routeInformationProvider,
+        // routeInformationParser: appRouter.routeInformationParser,
+        // routerDelegate: appRouter.routerDelegate,
       ),
     );
   }

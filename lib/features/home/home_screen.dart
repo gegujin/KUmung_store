@@ -5,6 +5,7 @@ import 'package:kumeong_store/models/post.dart';
 import 'package:kumeong_store/core/widgets/app_bottom_nav.dart';
 import '../product/product_list_screen.dart';
 import '../home/alarm_screen.dart';
+import 'package:kumeong_store/core/ui/hero_tags.dart';
 import '../../core/theme.dart';
 import '../mypage/mypage_screen.dart';
 
@@ -18,13 +19,21 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   final List<Map<String, dynamic>> allProducts = [
+    {
+      'title': 'Willson 농구공 팝니다',
+      'location': '신촌운동장',
+      'time': '2일전',
+      'likes': 1,
+      'views': 5,
+      'price': '25,000원',
+      'isLiked': false,
+    },
     {
       'title': '컴공 과잠 팝니다',
       'location': '모시래마을',
-      'time': '2일전',
+      'time': '3일전',
       'likes': 1,
       'views': 5,
       'price': '30,000원',
@@ -34,7 +43,7 @@ class _HomePageState extends State<HomePage>
       'title': '스마트폰 판매합니다',
       'location': '중앙동',
       'time': '1일전',
-      'likes': 3,
+      'likes': 0,
       'views': 20,
       'price': '500,000원',
       'isLiked': false,
@@ -46,13 +55,10 @@ class _HomePageState extends State<HomePage>
 
   void _toggleLike(int index) {
     setState(() {
-      if (allProducts[index]['isLiked']) {
-        allProducts[index]['isLiked'] = false;
-        allProducts[index]['likes'] = (allProducts[index]['likes'] as int) - 1;
-      } else {
-        allProducts[index]['isLiked'] = true;
-        allProducts[index]['likes'] = (allProducts[index]['likes'] as int) + 1;
-      }
+      final liked = allProducts[index]['isLiked'] as bool;
+      final likes = allProducts[index]['likes'] as int;
+      allProducts[index]['isLiked'] = !liked;
+      allProducts[index]['likes'] = liked ? likes - 1 : likes + 1;
     });
   }
 
@@ -72,8 +78,9 @@ class _HomePageState extends State<HomePage>
             .contains(searchText.toLowerCase()))
         .toList();
 
-    final productId =
-        (demoProduct.id.isNotEmpty) ? demoProduct.id : 'demo-product';
+    // ❗️demoProduct가 프로젝트에 이미 존재한다고 가정 (models/post.dart)
+    // 존재하지 않는다면 'demo-product'로 대체
+    final productId = (demoProduct.id.isNotEmpty) ? demoProduct.id : 'demo-product';
 
     return Scaffold(
       appBar: AppBar(
@@ -84,8 +91,10 @@ class _HomePageState extends State<HomePage>
             IconButton(
               icon: const Icon(Icons.menu, color: Colors.white),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const CategoryPage()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CategoryPage()),
+                );
               },
             ),
             const SizedBox(width: 10),
@@ -95,10 +104,8 @@ class _HomePageState extends State<HomePage>
                   hintText: '상품 검색',
                   fillColor: Colors.white,
                   filled: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(3)),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(3)),
                 ),
                 onChanged: (v) => setState(() => searchText = v),
               ),
@@ -106,8 +113,10 @@ class _HomePageState extends State<HomePage>
             const SizedBox(width: 10),
             IconButton(
               icon: const Icon(Icons.notifications, color: Colors.white),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const AlarmPage())),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AlarmPage()),
+              ),
             ),
           ],
         ),
@@ -119,59 +128,77 @@ class _HomePageState extends State<HomePage>
             itemCount: filteredProducts.length,
             itemBuilder: (_, index) {
               final product = filteredProducts[index];
+
               return InkWell(
                 onTap: () {
-                  context.goNamed('productDetail',
-                      pathParameters: {'productId': productId},
-                      extra: demoProduct);
+                  // 👉 라우팅: 기존 라우터 규약 유지 (extra로 demoProduct 전달)
+                  context.goNamed(
+                    'productDetail',
+                    pathParameters: {'productId': productId},
+                    extra: demoProduct,
+                  );
                 },
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(width: 80, height: 80, color: Colors.grey[300]),
+                      // ⭕️ 여기서 이전엔 'item' 변수를 참조해 에러가 났음.
+                      //    현재는 placeholder 이미지(또는 로컬/네트워크 이미지)로 대체.
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          width: 80,
+                          height: 80,
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.image, color: Colors.white70),
+                        ),
+                      ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(product['title'],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.ellipsis),
-                                ),
-                                GestureDetector(
-                                  onTap: () => _toggleLike(index),
-                                  child: Icon(
-                                    product['isLiked']
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: product['isLiked']
-                                        ? Colors.red
-                                        : Colors.grey,
-                                    size: 22,
-                                  ),
-                                ),
-                              ],
+                            // 🔧 'item' 참조 제거 (컴파일 에러 원인이던 부분)
+                            // 필요 시 여기(또는 상세)에서 Hero를 쓸 계획이라면
+                            // heroTagProductImg(productId, branch: 'home') 처럼
+                            // '고유 id'가 정해진 뒤에 추가하세요.
+
+                            Text(
+                              product['title'] as String,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 4),
-                            Text('${product['location']} | ${product['time']}',
-                                style: const TextStyle(color: Colors.grey)),
+                            Text(
+                              '${product['location']} | ${product['time']}',
+                              style: const TextStyle(color: Colors.grey),
+                            ),
                             const SizedBox(height: 4),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('가격 ${product['price']}'),
                                 Text(
-                                    '찜 ${product['likes']} 조회수 ${product['views']}',
-                                    style: const TextStyle(color: Colors.grey)),
+                                  '찜 ${product['likes']} 조회수 ${product['views']}',
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
                               ],
+                            ),
+                            const SizedBox(height: 6),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: GestureDetector(
+                                onTap: () => _toggleLike(index),
+                                child: Icon(
+                                  (product['isLiked'] as bool)
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: (product['isLiked'] as bool) ? Colors.red : Colors.grey,
+                                  size: 22,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -202,20 +229,18 @@ class _HomePageState extends State<HomePage>
                       _toggleFabMenu();
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (_) => const KuDeliverySignupPage()),
+                        MaterialPageRoute(builder: (_) => const KuDeliverySignupPage()),
                       );
                     },
                   ),
                   const Divider(height: 1, color: Color(0xFFF1F3F5)),
                   _MenuItem(
                     icon: Icons.add_box_outlined,
-                    iconColor: const Color(0xFFFF6A00),
+                    iconColor: Color(0xFFFF6A00),
                     label: '상품 등록',
                     onTap: () {
                       _toggleFabMenu();
-                      context.goNamed('productEdit',
-                          pathParameters: {'productId': productId});
+                      context.goNamed('productEdit', pathParameters: {'productId': productId});
                     },
                   ),
                 ],
@@ -224,12 +249,17 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: mainColor,
-        onPressed: _toggleFabMenu,
-        child: Icon(_isMenuOpen ? Icons.close : Icons.add, color: Colors.white),
+      // ✅ FAB: 루트에서만 히어로 참여 + 고유 태그(브랜치 네임스페이스)
+      floatingActionButton: HeroMode(
+        enabled: (ModalRoute.of(context)?.isFirst ?? true),
+        child: FloatingActionButton(
+          heroTag: heroTagFab('home'),
+          backgroundColor: mainColor,
+          onPressed: _toggleFabMenu,
+          child: Icon(_isMenuOpen ? Icons.close : Icons.add, color: Colors.white),
+        ),
       ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
+      // bottomNavigationBar: const AppBottomNav(currentIndex: 0),
     );
   }
 }
@@ -288,8 +318,7 @@ class _MenuItem extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
             ),
           ],

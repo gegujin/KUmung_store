@@ -146,7 +146,7 @@ class MyPage extends StatelessWidget {
         ),
       ),
       // ⬇️ 하단바: 탭 인덱스 3(마이)
-      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
+      // bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }

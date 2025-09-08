@@ -145,7 +145,7 @@ class _HeartPageState extends State<HeartPage> {
                 );
               },
             ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 2),
+      // bottomNavigationBar: const AppBottomNav(currentIndex: 2),
     );
   }
 }
