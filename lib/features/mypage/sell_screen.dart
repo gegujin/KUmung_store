@@ -200,7 +200,7 @@ class _SellPageState extends State<SellPage> {
           ),
         ],
       ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
+      // bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }

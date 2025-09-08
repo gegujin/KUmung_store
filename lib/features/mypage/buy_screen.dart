@@ -286,7 +286,6 @@ class BuyPage extends StatelessWidget {
                 );
               },
             ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 

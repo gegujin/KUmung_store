@@ -132,7 +132,7 @@ class _FriendsPageState extends State<FriendsPage> {
       ),
 
       // ✅ 하단 네비게이션
-      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
+      // bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }

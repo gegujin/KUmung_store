@@ -114,18 +114,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }));
             },
           ),
-          ListTile(
-            title: const Text('포인트/머니 관리 (충전·사용 내역, 자동충전)'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return const _TempScaffold(
-                  title: '포인트/머니 관리',
-                  body: '충전/사용 내역, 자동충전 설정(추후 구현)',
-                );
-              }));
-            },
-          ),
           const Divider(height: 1),
 
           // ───────────────── 3) 계정관리

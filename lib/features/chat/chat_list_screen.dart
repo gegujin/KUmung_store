@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kumeong_store/core/widgets/app_bottom_nav.dart'; // 하단바
 import '../../core/theme.dart';
+import 'package:kumeong_store/core/router/route_names.dart' as R;
 
 class ChatSummary {
   final String id; // 채팅방 ID
@@ -93,11 +94,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
             final chat = _items[index];
             return ListTile(
               onTap: () {
-                // 예: /chat/:roomId 로 이동 (router.dart에서 라우트 정의 필요)
-                context.push('/chat/${chat.id}', extra: {
-                  'partnerName': chat.partnerName,
-                });
-              },
+                context.pushNamed(
+                R.RouteNames.chatRoomOverlay,             // ✅ 루트 레벨 오버레이
+                pathParameters: {'roomId': chat.id},
+                extra: { 'partnerName': chat.partnerName, 'isKuDelivery': false, 'securePaid': false },
+              );
+            },
               leading: _Avatar(url: chat.avatarUrl),
               title: Text(
                 chat.partnerName,

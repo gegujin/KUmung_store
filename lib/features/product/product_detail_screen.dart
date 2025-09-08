@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kumeong_store/models/post.dart';
 import 'package:kumeong_store/core/theme.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:kumeong_store/core/router/route_names.dart' as R;
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({
@@ -315,7 +316,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       if (!mounted) return;
       context.pushNamed(
-        'chatRoom',
+        R.RouteNames.chatRoomOverlay,               // ✅ 오버레이 라우트로!
         pathParameters: {'roomId': roomId},
         extra: {
           'partnerName': p.seller.name,
@@ -323,7 +324,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           'securePaid': false,
         },
       );
-    } catch (e) {
+    } 
+    catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('채팅방 생성 실패: $e')));

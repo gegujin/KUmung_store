@@ -1,16 +1,35 @@
-// 라우트 이름을 한 곳에서 관리
+// lib/core/router/route_names.dart
 class RouteNames {
-  // 탭 루트
+  // ── 탭 루트
   static const home = 'home';
   static const chat = 'chat';
   static const favorites = 'favorites';
   static const mypage = 'mypage';
 
-  // 하위/상세
-  static const homeDetail = 'homeDetail';
-  static const chatRoom = 'chatRoom';
-  static const points = 'points';
+  // ── Home 하위
+  static const productDetail = 'productDetail';
+  static const productEdit = 'productEdit';
+  static const categories = 'categories';
+  static const alarms = 'alarms';
+  @Deprecated('productDetail을 사용하세요')
+  static const homeDetail = productDetail;
 
+  // ── KU대리
+  static const kuDeliverySignup = 'kuDeliverySignup';
+  static const deliveryStatus = 'delivery-status';
+
+  // ── Chat
+  static const chatRoom = 'chatRoom';
+  static const chatRoomOverlay = 'chatRoomOverlay';
+
+  // ── MyPage 하위
+  static const points = 'points';
+  static const buyHistory = 'buyHistory';
+  static const sellHistory = 'sellHistory';
+  static const recentPosts = 'recentPosts';
+  static const friends = 'friends';
+
+  // ── 거래/결제 플로우
   static const tradeConfirm = 'tradeConfirm';
   static const paymentMethod = 'paymentMethod';
   static const securePay = 'securePay';
