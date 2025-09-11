@@ -184,7 +184,6 @@ class _CategoryPageState extends State<CategoryPage> {
           ),
         ],
       ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
     );
   }
 }

@@ -35,8 +35,14 @@ import 'package:kumeong_store/features/trade/trade_confirm_screen.dart';
 import 'package:kumeong_store/features/trade/payment_method_screen.dart';
 import 'package:kumeong_store/features/trade/secure_payment_screen.dart';
 
+import 'package:kumeong_store/features/delivery/ku_delivery_alert_screen.dart'
+  show KuDeliveryAlertScreen;
 import 'package:kumeong_store/features/delivery/delivery_status_screen.dart'
     show DeliveryStatusScreen, DeliveryStatusArgs;
+import 'package:kumeong_store/features/delivery/ku_delivery_list_screen.dart'
+    show KuDeliveryFeedScreen;
+import 'package:kumeong_store/features/delivery/ku_delivery_detail_screen.dart'
+    show KuDeliveryDetailScreen, KuDeliveryDetailArgs;
 
 import 'package:kumeong_store/models/post.dart' show Product;
 import 'package:kumeong_store/core/widgets/app_bottom_nav.dart';
@@ -249,6 +255,19 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const KuDeliverySignupPage(),
     ),
     GoRoute(
+      path: '/delivery/feed',
+      name: R.RouteNames.kuDeliveryFeed,
+      builder: (context, state) => const KuDeliveryFeedScreen(),
+    ),
+    GoRoute(
+      path: '/delivery/detail',
+      name: R.RouteNames.kuDeliveryDetail,
+      builder: (context, state) {
+        final args = state.extra as KuDeliveryDetailArgs;
+        return KuDeliveryDetailScreen(args: args);
+      },
+    ),
+    GoRoute(
       path: '/delivery/status',
       name: R.RouteNames.deliveryStatus,
       builder: (context, state) {
@@ -256,6 +275,12 @@ final GoRouter appRouter = GoRouter(
         return DeliveryStatusScreen(args: args);
       },
     ),
+    GoRoute(
+      path: '/delivery/alerts',
+      name: R.RouteNames.kuDeliveryAlerts,
+      builder: (context, state) => const KuDeliveryAlertScreen(),
+    ),
+
 
     // ── 거래 플로우
     GoRoute(

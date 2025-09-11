@@ -1,8 +1,10 @@
+// lib/features/delivery/ku_delivery_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'ku_delivery_detail_screen.dart';
+import 'ku_delivery_detail_screen.dart'; // KuDeliveryDetailArgs 사용을 위해 유지
+import 'package:kumeong_store/core/router/route_names.dart' as R; // ✅ 라우트 이름 사용
 import 'package:kumeong_store/models/latlng.dart' as model;
 
 const Color kuInfo = Color(0xFF147AD6); // KU 파란색 강조 컬러
@@ -60,12 +62,14 @@ class _KuDeliveryFeedScreenState extends State<KuDeliveryFeedScreen> {
         title: const Text('KU 대리'),
         leading: IconButton(
           icon: const Icon(Icons.home_rounded, color: Colors.white),
-          onPressed: () {context.goNamed('home');},
+          // ✅ 홈 버튼 → 홈 탭으로 이동
+          onPressed: () => context.goNamed(R.RouteNames.home),
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () => context.pushNamed('kuDeliveryAlerts'),
+            // ✅ 실제 등록된 알림 라우트로 연결
+            onPressed: () => context.pushNamed(R.RouteNames.kuDeliveryAlerts),
           ),
         ],
       ),
@@ -114,6 +118,7 @@ class _KuDeliveryFeedScreenState extends State<KuDeliveryFeedScreen> {
               onTap: () {
                 final minutesAgo =
                     DateTime.now().difference(it.postedAt).inMinutes;
+
                 final args = KuDeliveryDetailArgs(
                   title: it.categoryTop,
                   sellerName: '거래자',
@@ -126,8 +131,8 @@ class _KuDeliveryFeedScreenState extends State<KuDeliveryFeedScreen> {
                   endCoord: model.LatLng(lat: 37.3352, lng: 126.8251),
                 );
 
-                context.pushNamed(KuDeliveryDetailScreen.routeName,
-                    extra: args);
+                // ✅ 리스트 아이템 탭 → 배달 상세 페이지(이름 라우트)
+                context.pushNamed(R.RouteNames.kuDeliveryDetail, extra: args);
               },
             ),
           );

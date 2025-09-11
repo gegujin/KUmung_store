@@ -91,13 +91,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           children: [
             IconButton(
               icon: const Icon(Icons.menu, color: Colors.white),
-              // onPressed: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (_) => const CategoryPage()),
-              //   );
-              // },
-              onPressed: () => context.pushNamed(R.RouteNames.categories),
+              onPressed: () => context.pushNamed(R.RouteNames.categories), // ✅
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -115,11 +109,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             const SizedBox(width: 10),
             IconButton(
               icon: const Icon(Icons.notifications, color: Colors.white),
-              // onPressed: () => Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (_) => const AlarmPage()),
-              // ),
-              onPressed: () => context.pushNamed(R.RouteNames.alarms),
+              onPressed: () => context.pushNamed(R.RouteNames.alarms), // ✅
             ),
           ],
         ),
@@ -128,26 +118,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         children: [
           // 상품 리스트
           ListView.builder(
+            padding: const EdgeInsets.only(bottom: 120), // ✅ FAB/메뉴 영역 여유
             itemCount: filteredProducts.length,
             itemBuilder: (_, index) {
               final product = filteredProducts[index];
 
               return InkWell(
-                onTap: () {
-                  // 👉 라우팅: 기존 라우터 규약 유지 (extra로 demoProduct 전달)
-                  context.goNamed(
-                    'productDetail',
-                    pathParameters: {'productId': productId},
-                    extra: demoProduct,
-                  );
-                },
+                onTap: () => context.pushNamed( // ✅ 상세는 push
+                  R.RouteNames.productDetail,
+                  pathParameters: {'productId': productId},
+                  extra: demoProduct,
+                ),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ⭕️ 여기서 이전엔 'item' 변수를 참조해 에러가 났음.
-                      //    현재는 placeholder 이미지(또는 로컬/네트워크 이미지)로 대체.
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Container(
@@ -162,11 +148,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 🔧 'item' 참조 제거 (컴파일 에러 원인이던 부분)
-                            // 필요 시 여기(또는 상세)에서 Hero를 쓸 계획이라면
-                            // heroTagProductImg(productId, branch: 'home') 처럼
-                            // '고유 id'가 정해진 뒤에 추가하세요.
-
                             Text(
                               product['title'] as String,
                               maxLines: 1,
@@ -213,45 +194,61 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             },
           ),
 
+          // ✅ (옵션) 바깥 터치로 메뉴 닫기용 투명 오버레이
+          if (_isMenuOpen)
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: _toggleFabMenu,
+                child: const SizedBox.shrink(),
+              ),
+            ),
+
           // FAB 메뉴
           AnimatedPositioned(
             duration: const Duration(milliseconds: 250),
             right: 16,
             bottom: _isMenuOpen ? 100 : 80,
             curve: Curves.easeOut,
-            child: AnimatedOpacity(
-              opacity: _isMenuOpen ? 1 : 0,
-              duration: const Duration(milliseconds: 200),
-              child: _MenuCard(
-                children: [
-                  _MenuItem(
-                    icon: Icons.delivery_dining,
-                    iconColor: kuInfo,
-                    label: 'KU대리',
-                    onTap: () {
-                      _toggleFabMenu();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const KuDeliverySignupPage()),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1, color: Color(0xFFF1F3F5)),
-                  _MenuItem(
-                    icon: Icons.add_box_outlined,
-                    iconColor: Color(0xFFFF6A00),
-                    label: '상품 등록',
-                    onTap: () {
-                      _toggleFabMenu();
-                      context.goNamed('productEdit', pathParameters: {'productId': productId});
-                    },
-                  ),
-                ],
+
+            // ✅ 핵심: 닫혀 있을 땐 터치 완전 차단 (히트 테스트 불가)
+            child: IgnorePointer(
+              ignoring: !_isMenuOpen,
+              child: AnimatedOpacity(
+                opacity: _isMenuOpen ? 1 : 0,
+                duration: const Duration(milliseconds: 200),
+                child: _MenuCard(
+                  children: [
+                    _MenuItem(
+                      icon: Icons.delivery_dining,
+                      iconColor: kuInfo,
+                      label: 'KU대리',
+                      onTap: () {
+                        _toggleFabMenu();
+                        context.pushNamed(R.RouteNames.kuDeliverySignup); // ✅
+                      },
+                    ),
+                    const Divider(height: 1, color: Color(0xFFF1F3F5)),
+                    _MenuItem(
+                      icon: Icons.add_box_outlined,
+                      iconColor: Color(0xFFFF6A00),
+                      label: '상품 등록',
+                      onTap: () {
+                        _toggleFabMenu();
+                        context.pushNamed( // ✅
+                          R.RouteNames.productEdit,
+                          pathParameters: {'productId': productId},
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
+
       // ✅ FAB: 루트에서만 히어로 참여 + 고유 태그(브랜치 네임스페이스)
       floatingActionButton: HeroMode(
         enabled: (ModalRoute.of(context)?.isFirst ?? true),
@@ -262,7 +259,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           child: Icon(_isMenuOpen ? Icons.close : Icons.add, color: Colors.white),
         ),
       ),
-      // bottomNavigationBar: const AppBottomNav(currentIndex: 0),
     );
   }
 }
@@ -312,6 +308,7 @@ class _MenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         child: Row(

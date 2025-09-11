@@ -23,6 +23,9 @@ class RouteNames {
   // ── KU대리
   static const kuDeliverySignup = 'kuDeliverySignup';
   static const deliveryStatus = 'delivery-status';
+  static const kuDeliveryFeed   = 'kuDeliveryFeed';
+  static const kuDeliveryDetail = 'kuDeliveryDetail';
+  static const kuDeliveryAlerts = 'kuDeliveryAlerts';
 
   // ── Chat
   static const chatRoom = 'chatRoom';

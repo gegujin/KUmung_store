@@ -1,15 +1,19 @@
+// lib/features/auth/login_screen.dart
 import 'package:flutter/material.dart';
-import '../home/home_screen.dart';
-import '../auth/school_sign_screen.dart';
-import '../auth/id_find_screen.dart';
-import '../auth/password_find_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kumeong_store/core/router/route_names.dart' as R;
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
+  Future<bool> _signIn() async {
+    // TODO: 실제 로그인 로직
+    await Future.delayed(const Duration(milliseconds: 300));
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // ✅ 앱 테마 primary color 사용
     final mainColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
@@ -17,9 +21,9 @@ class LoginPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start, // 위쪽 정렬
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 60), // 상단 여백
+              const SizedBox(height: 60),
               Text(
                 'KU멍가게',
                 style: TextStyle(
@@ -29,38 +33,28 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              TextField(
-                decoration: const InputDecoration(labelText: '아이디'),
-                style: const TextStyle(fontSize: 16),
+              const TextField(
+                decoration: InputDecoration(labelText: '아이디'),
+                style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 10),
-              TextField(
-                decoration: const InputDecoration(labelText: '비밀번호'),
+              const TextField(
+                decoration: InputDecoration(labelText: '비밀번호'),
                 obscureText: true,
-                style: const TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const IdFindPage()),
-                      );
-                    },
+                    // ✅ 로그인 플로우 밖의 서브 페이지 → pushNamed
+                    onPressed: () => context.pushNamed(R.RouteNames.idFind),
                     child: const Text('아이디 찾기'),
                   ),
                   TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const PasswordFindPage(),
-                        ),
-                      );
-                    },
+                    onPressed: () =>
+                        context.pushNamed(R.RouteNames.passwordFind),
                     child: const Text('비밀번호 찾기'),
                   ),
                 ],
@@ -71,13 +65,16 @@ class LoginPage extends StatelessWidget {
                   backgroundColor: mainColor,
                   minimumSize: const Size(double.infinity, 55),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const HomePage()),
-                  );
+                onPressed: () async {
+                  final ok = await _signIn();
+                  if (!context.mounted) return;
+                  if (ok) {
+                    // ✅ 쉘의 홈 브랜치로 '교체' 이동 → 하단바 즉시 표시
+                    context.goNamed(R.RouteNames.home);
+                  }
                 },
-                child: const Text('로그인', style: TextStyle(color: Colors.white)),
+                child:
+                    const Text('로그인', style: TextStyle(color: Colors.white)),
               ),
               const SizedBox(height: 10),
               OutlinedButton(
@@ -85,16 +82,9 @@ class LoginPage extends StatelessWidget {
                   minimumSize: const Size(double.infinity, 55),
                   side: BorderSide(color: mainColor),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const SchoolSignUpPage()),
-                  );
-                },
-                child: Text(
-                  '회원가입',
-                  style: TextStyle(color: mainColor),
-                ),
+                onPressed: () =>
+                    context.pushNamed(R.RouteNames.schoolSignUp),
+                child: Text('회원가입', style: TextStyle(color: mainColor)),
               ),
             ],
           ),
