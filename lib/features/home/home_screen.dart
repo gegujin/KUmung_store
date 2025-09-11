@@ -8,6 +8,7 @@ import '../home/alarm_screen.dart';
 import 'package:kumeong_store/core/ui/hero_tags.dart';
 import '../../core/theme.dart';
 import '../mypage/mypage_screen.dart';
+import 'package:kumeong_store/core/router/route_names.dart' as R;
 
 // ✅ KU 전용 색상 상수
 const Color kuInfo = Color(0xFF147AD6);
@@ -90,12 +91,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           children: [
             IconButton(
               icon: const Icon(Icons.menu, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const CategoryPage()),
-                );
-              },
+              // onPressed: () {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(builder: (_) => const CategoryPage()),
+              //   );
+              // },
+              onPressed: () => context.pushNamed(R.RouteNames.categories),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -113,10 +115,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             const SizedBox(width: 10),
             IconButton(
               icon: const Icon(Icons.notifications, color: Colors.white),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AlarmPage()),
-              ),
+              // onPressed: () => Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (_) => const AlarmPage()),
+              // ),
+              onPressed: () => context.pushNamed(R.RouteNames.alarms),
             ),
           ],
         ),

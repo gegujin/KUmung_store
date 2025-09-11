@@ -6,6 +6,12 @@ class RouteNames {
   static const favorites = 'favorites';
   static const mypage = 'mypage';
 
+  // ── 인증(Auth) 관련
+  static const login = 'login';
+  static const schoolSignUp = 'schoolSignUp';
+  static const idFind = 'idFind';
+  static const passwordFind = 'passwordFind';
+
   // ── Home 하위
   static const productDetail = 'productDetail';
   static const productEdit = 'productEdit';

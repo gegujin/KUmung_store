@@ -170,9 +170,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 item(Icons.photo_library_outlined, '앨범', () => _toast('앨범 열기')),
                 item(
                     Icons.photo_camera_outlined, '카메라', () => _toast('카메라 열기')),
-                item(Icons.message_outlined, '자주쓰는 문구', () => _toast('문구 선택')),
-                item(Icons.place_outlined, '장소', () => _toast('장소 공유')),
-                item(Icons.event_outlined, '약속', () => _toast('약속 잡기')),
                 const SizedBox(height: 8),
               ],
             ),

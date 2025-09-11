@@ -1,9 +1,16 @@
-// lib/core/router/app_router.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kumeong_store/core/router/route_names.dart' as R;
 
 // ===== Screens =====
+import 'package:kumeong_store/features/auth/login_screen.dart' show LoginPage;
+import 'package:kumeong_store/features/auth/school_sign_screen.dart'
+    show SchoolSignUpPage;
+import 'package:kumeong_store/features/auth/id_find_screen.dart'
+    show IdFindPage;
+import 'package:kumeong_store/features/auth/password_find_screen.dart'
+    show PasswordFindPage;
+
 import 'package:kumeong_store/features/home/home_screen.dart' show HomePage;
 import 'package:kumeong_store/features/home/alarm_screen.dart' show AlarmPage;
 import 'package:kumeong_store/features/delivery/ku_delivery_signup_screen.dart'
@@ -45,8 +52,30 @@ final _mypageKey = GlobalKey<NavigatorState>();
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootKey,
-  initialLocation: '/home',
+  initialLocation: '/', // ✅ 시작 경로를 로그인 화면으로 변경
   routes: [
+    // ========== 인증(Auth) 관련 라우트들 (하단바 숨김) ==========
+    GoRoute(
+      path: '/',
+      name: R.RouteNames.login,
+      builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      path: '/auth/school-signup',
+      name: R.RouteNames.schoolSignUp,
+      builder: (context, state) => const SchoolSignUpPage(),
+    ),
+    GoRoute(
+      path: '/auth/id-find',
+      name: R.RouteNames.idFind,
+      builder: (context, state) => const IdFindPage(),
+    ),
+    GoRoute(
+      path: '/auth/password-find',
+      name: R.RouteNames.passwordFind,
+      builder: (context, state) => const PasswordFindPage(),
+    ),
+
     // ========== 탭(IndexedStack)
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
@@ -54,6 +83,12 @@ final GoRouter appRouter = GoRouter(
           body: navigationShell,
           bottomNavigationBar: AppBottomNav(
             currentIndex: navigationShell.currentIndex,
+            // ✅ go_router 권장 방식: 브랜치 전환은 goBranch 사용
+            onTap: (i) => navigationShell.goBranch(
+              i,
+              // 같은 탭을 다시 눌렀을 때 루트로 스택 초기화할지 여부
+              initialLocation: i == navigationShell.currentIndex,
+            ),
           ),
         );
       },
