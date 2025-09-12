@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:kumeong_store/core/widgets/app_bottom_nav.dart';
 import 'package:go_router/go_router.dart'; // ⬅️ 네임드 라우트 이동용
+import 'package:kumeong_store/core/router/route_names.dart' as R;
 
 // 필요시 유지(포인트/설정은 별도 라우트가 없다면 기존 push 사용)
 import '../mypage/point_screen.dart';
@@ -39,11 +40,7 @@ class MyPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.settings, color: Colors.white),
             onPressed: () {
-              // 설정은 독립 화면이면 기존 push 사용(라우터에 등록되어 있다면 goNamed로 교체)
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingsScreen()),
-              );
+              context.pushNamed(R.RouteNames.settings);  // ⬅️ MaterialPageRoute 사용 금지
             },
           ),
         ],

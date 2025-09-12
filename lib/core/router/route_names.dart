@@ -6,7 +6,7 @@ class RouteNames {
   static const favorites = 'favorites';
   static const mypage = 'mypage';
 
-  // ── 인증(Auth) 관련
+  // ── 인증(Auth)
   static const login = 'login';
   static const schoolSignUp = 'schoolSignUp';
   static const idFind = 'idFind';
@@ -22,7 +22,7 @@ class RouteNames {
 
   // ── KU대리
   static const kuDeliverySignup = 'kuDeliverySignup';
-  static const deliveryStatus = 'delivery-status';
+  static const deliveryStatus = 'delivery-status'; // 기존 값 유지
   static const kuDeliveryFeed   = 'kuDeliveryFeed';
   static const kuDeliveryDetail = 'kuDeliveryDetail';
   static const kuDeliveryAlerts = 'kuDeliveryAlerts';
@@ -42,4 +42,12 @@ class RouteNames {
   static const tradeConfirm = 'tradeConfirm';
   static const paymentMethod = 'paymentMethod';
   static const securePay = 'securePay';
+
+  // ── 설정(Settings) 오버레이 & 하위 (★ 추가)
+  static const settings = 'settings';
+  static const paymentMethods = 'paymentMethods'; // 카드/간편결제 관리
+  static const refundAccount  = 'refundAccount';  // 환불계좌
+  static const faq            = 'faq';
+  static const bugReport      = 'bugReport';
+  static const appInfo        = 'appInfo';
 }

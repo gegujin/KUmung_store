@@ -1,6 +1,9 @@
 // lib/features/settings/settings_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kumeong_store/core/widgets/app_bottom_nav.dart';
+import 'package:kumeong_store/core/router/route_names.dart' as R;
+
 import 'package:kumeong_store/features/settings/app_info_screen.dart';
 import 'package:kumeong_store/features/settings/bug_report_screen.dart';
 import 'package:kumeong_store/features/settings/faq_screen.dart';
@@ -48,6 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
       body: ListView(
         children: [
           const SizedBox(height: 8),
