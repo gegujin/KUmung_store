@@ -63,6 +63,14 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
     final distanceM = _distanceMeters(a.startCoord, a.endCoord);
     final distanceText = _formatDistance(distanceM);
 
+    // 예시: 배달 단계 (실제 API에 따라 변경 가능)
+    final timelineSteps = [
+      TimelineStep(title: '주문 완료', done: true),
+      TimelineStep(title: '픽업 중', done: true),
+      TimelineStep(title: '배달 중', done: false),
+      TimelineStep(title: '도착', done: false),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kuInfo,
@@ -75,7 +83,11 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
           ProductHeader(imageUrl: a.imageUrl, title: a.productTitle),
           const SizedBox(height: 12),
 
-          // 2) 메타 정보
+          // 2) 배달 연대기 (Timeline)
+          DeliveryTimeline(steps: timelineSteps),
+          const SizedBox(height: 12),
+
+          // 3) 메타 정보
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -92,7 +104,8 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
                   children: [
                     Expanded(child: RowLine(label: '출발', value: a.startName)),
                     const SizedBox(width: 8),
-                    Container(width: 1, height: 18, color: kuInfo.withOpacity(0.5)),
+                    Container(
+                        width: 1, height: 18, color: kuInfo.withOpacity(0.5)),
                     const SizedBox(width: 8),
                     Expanded(child: RowLine(label: '도착', value: a.endName)),
                   ],
@@ -103,7 +116,8 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
                 const SizedBox(height: 2),
                 Text(
                   '${a.moveTypeText} (예상시간 : ${a.etaMinutes}분)',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: kuInfo),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w700, color: kuInfo),
                 ),
               ],
             ),
@@ -111,7 +125,7 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
 
           const SizedBox(height: 12),
 
-          // 3) 위치 카드 (웹 미리보기 + 모바일 실지도)
+          // 4) 위치 카드 (웹 미리보기 + 모바일 실지도)
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -126,7 +140,10 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
                 Row(
                   children: [
                     const Text('위치',
-                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF121319))),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                            color: Color(0xFF121319))),
                     const Spacer(),
                     TextButton.icon(
                       onPressed: () => _openInNaverMap(
@@ -157,7 +174,10 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
                 // 주소(= 도착지 이름) + 거리/시간
                 Text(
                   a.endName,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF121319)),
+                  style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF121319)),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -184,7 +204,8 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
         child: const Center(
           child: Text(
             '웹 미리보기: 지도는 모바일에서 표시됩니다.',
-            style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w600),
+            style:
+                TextStyle(color: Colors.black54, fontWeight: FontWeight.w600),
           ),
         ),
       );
@@ -216,15 +237,19 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
 
             final polyline = NPolylineOverlay(
               id: 'route',
-              coords: points.map((p) => NLatLng(p.lat, p.lng)).toList(growable: false),
+              coords: points
+                  .map((p) => NLatLng(p.lat, p.lng))
+                  .toList(growable: false),
               width: 6,
               color: kuInfo,
             );
             await controller.addOverlay(polyline);
 
             final bounds = NLatLngBounds(
-              southWest: NLatLng(_min(a.startCoord.lat, a.endCoord.lat), _min(a.startCoord.lng, a.endCoord.lng)),
-              northEast: NLatLng(_max(a.startCoord.lat, a.endCoord.lat), _max(a.startCoord.lng, a.endCoord.lng)),
+              southWest: NLatLng(_min(a.startCoord.lat, a.endCoord.lat),
+                  _min(a.startCoord.lng, a.endCoord.lng)),
+              northEast: NLatLng(_max(a.startCoord.lat, a.endCoord.lat),
+                  _max(a.startCoord.lng, a.endCoord.lng)),
             );
             await controller.updateCamera(NCameraUpdate.fitBounds(bounds));
           },
@@ -261,8 +286,9 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
     final la2 = _deg2rad(b.lat);
 
     final h = (math.sin(dLat / 2) * math.sin(dLat / 2)) +
-        math.cos(la1) * math.cos(la2) *
-        (math.sin(dLon / 2) * math.sin(dLon / 2));
+        math.cos(la1) *
+            math.cos(la2) *
+            (math.sin(dLon / 2) * math.sin(dLon / 2));
 
     final c = 2 * math.atan2(math.sqrt(h), math.sqrt(1 - h));
     return R * c;
@@ -301,7 +327,6 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
       '&destination=${end.lng},${end.lat},${Uri.encodeComponent(endName)}',
     );
 
-    // 앱 스킴 우선, 실패 시 웹
     if (await canLaunchUrl(scheme)) {
       await launchUrl(scheme);
       return;
@@ -371,15 +396,76 @@ class RowLine extends StatelessWidget {
       text: TextSpan(
         style: const TextStyle(fontSize: 15),
         children: [
-          const TextSpan(
-            text: '카테고리: ',
-            style: TextStyle(color: kuInfo, fontWeight: FontWeight.w600),
+          TextSpan(
+            text: '$label: ',
+            style: const TextStyle(color: kuInfo, fontWeight: FontWeight.w600),
           ),
           TextSpan(
             text: value,
             style: const TextStyle(color: Colors.black87),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// ───────── 배달 연대기 위젯 ─────────
+
+class TimelineStep {
+  final String title;
+  final bool done;
+  final DateTime? time;
+
+  TimelineStep({required this.title, this.done = false, this.time});
+}
+
+class DeliveryTimeline extends StatelessWidget {
+  const DeliveryTimeline({super.key, required this.steps});
+  final List<TimelineStep> steps;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: List.generate(steps.length * 2 - 1, (index) {
+          if (index.isEven) {
+            final step = steps[index ~/ 2];
+            return Column(
+              children: [
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: step.done ? kuInfo : Colors.grey[300],
+                  ),
+                  child: step.done
+                      ? const Icon(Icons.check, size: 16, color: Colors.white)
+                      : null,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  step.title,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: step.done ? kuInfo : Colors.grey[600]),
+                ),
+              ],
+            );
+          } else {
+            final prevStep = steps[index ~/ 2];
+            final nextStep = steps[index ~/ 2 + 1];
+            final done = prevStep.done && nextStep.done;
+            return Container(
+              width: 40,
+              height: 2,
+              color: done ? kuInfo : Colors.grey[300],
+            );
+          }
+        }),
       ),
     );
   }

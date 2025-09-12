@@ -1,6 +1,11 @@
 // lib/features/settings/settings_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kumeong_store/features/settings/app_info_screen.dart';
+import 'package:kumeong_store/features/settings/bug_report_screen.dart';
+import 'package:kumeong_store/features/settings/faq_screen.dart';
+import 'package:kumeong_store/features/settings/payment_methods_screen.dart';
+import 'package:kumeong_store/features/settings/refund_account_screen.dart';
 
 // 상세 화면들 (같은 폴더라면 ./ 로 써도 됩니다)
 import './edit_profile_screen.dart';
@@ -24,10 +29,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   // 알림 상태
   bool _notificationsEnabled = true; // 전체 알림
-  bool _notifDelivery = true;        // 배달 상태 알림
-  bool _soundModeIsSound = true;     // 켜짐=소리 / 꺼짐=진동
+  bool _notifDelivery = true; // 배달 상태 알림
+  bool _soundModeIsSound = true; // 켜짐=소리 / 꺼짐=진동
   TimeOfDay _dndStart = const TimeOfDay(hour: 22, minute: 0);
-  TimeOfDay _dndEnd   = const TimeOfDay(hour: 7,  minute: 0);
+  TimeOfDay _dndEnd = const TimeOfDay(hour: 7, minute: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return const _TempScaffold(
-                  title: '결제수단 관리',
-                  body: '카드/간편결제 관리 화면(추후 구현)',
-                );
+                return const PaymentMethodsPage();
               }));
             },
           ),
@@ -107,10 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return const _TempScaffold(
-                  title: '환불 계좌 관리',
-                  body: '환불 계좌 등록/수정 화면(추후 구현)',
-                );
+                return const RefundAccountPage();
               }));
             },
           ),
@@ -153,31 +152,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return const _TempScaffold(title: 'FAQ', body: '자주 묻는 질문 목록(추후 구현)');
+                return const FaqPage();
               }));
             },
           ),
           ListTile(
             title: const Text('문제 신고(버그 리포트·로그 전송)'),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () async {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('로그가 준비되면 전송 기능과 연결할게요.')),
-              );
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return const BugReportPage();
+              }));
             },
           ),
           ListTile(
             title: const Text('앱 버전 / 업데이트 확인'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
-              showAboutDialog(
-                context: context,
-                applicationName: 'KU멍가게',
-                applicationVersion: '1.0.0',
-                children: const [
-                  Text('최신 버전 여부는 스토어/배포 채널과 연동하여 확인할 수 있어요.'),
-                ],
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return const AppInfoPage();
+              }));
             },
           ),
           const Divider(height: 1),
@@ -231,7 +225,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   // 방해 금지 시간대 선택
   Future<void> _pickDndRange() async {
-    final start = await showTimePicker(context: context, initialTime: _dndStart);
+    final start =
+        await showTimePicker(context: context, initialTime: _dndStart);
     if (!mounted || start == null) return;
     final end = await showTimePicker(context: context, initialTime: _dndEnd);
     if (!mounted || end == null) return;

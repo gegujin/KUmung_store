@@ -95,17 +95,21 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
           Card(
             color: Colors.white,
             margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: SizedBox(
               height: 300,
               child: Center(
                 child: Image.network(
                   widget.args.imageUrl,
                   fit: BoxFit.contain,
-                  loadingBuilder: (_, child, prog) =>
-                      prog == null ? child : const Center(child: CircularProgressIndicator(color: kuInfo)),
-                  errorBuilder: (_, __, ___) =>
-                      const Center(child: Icon(Icons.broken_image, size: 48, color: Colors.grey)),
+                  loadingBuilder: (_, child, prog) => prog == null
+                      ? child
+                      : const Center(
+                          child: CircularProgressIndicator(color: kuInfo)),
+                  errorBuilder: (_, __, ___) => const Center(
+                      child: Icon(Icons.broken_image,
+                          size: 48, color: Colors.grey)),
                 ),
               ),
             ),
@@ -125,10 +129,12 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                   children: [
                     CircleAvatar(
                       radius: 28,
-                      backgroundImage: (widget.args.sellerAvatarUrl == null || widget.args.sellerAvatarUrl!.isEmpty)
+                      backgroundImage: (widget.args.sellerAvatarUrl == null ||
+                              widget.args.sellerAvatarUrl!.isEmpty)
                           ? null
                           : NetworkImage(widget.args.sellerAvatarUrl!),
-                      child: (widget.args.sellerAvatarUrl == null || widget.args.sellerAvatarUrl!.isEmpty)
+                      child: (widget.args.sellerAvatarUrl == null ||
+                              widget.args.sellerAvatarUrl!.isEmpty)
                           ? const Icon(Icons.person_outline)
                           : null,
                     ),
@@ -137,7 +143,8 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.args.sellerName, style: t.titleMedium?.copyWith(color: kuInfo)),
+                          Text(widget.args.sellerName,
+                              style: t.titleMedium?.copyWith(color: kuInfo)),
                           const SizedBox(height: 6),
                           Row(
                             children: [
@@ -145,15 +152,20 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                               const SizedBox(width: 8),
                               const Text('·'),
                               const SizedBox(width: 8),
-                              Text('${widget.args.minutesAgo}분 전', style: t.bodyMedium),
+                              Text('${widget.args.minutesAgo}분 전',
+                                  style: t.bodyMedium),
                             ],
                           ),
                           const SizedBox(height: 6),
                           Row(
                             children: [
-                              Text('출발: ${widget.args.start}', style: t.bodySmall?.copyWith(color: Colors.grey[700])),
+                              Text('출발: ${widget.args.start}',
+                                  style: t.bodySmall
+                                      ?.copyWith(color: Colors.grey[700])),
                               const SizedBox(width: 12),
-                              Text('도착: ${widget.args.end}', style: t.bodySmall?.copyWith(color: Colors.grey[700])),
+                              Text('도착: ${widget.args.end}',
+                                  style: t.bodySmall
+                                      ?.copyWith(color: Colors.grey[700])),
                             ],
                           ),
                         ],
@@ -163,7 +175,8 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text('가격: $_priceText원',
-                    style: t.titleMedium?.copyWith(fontWeight: FontWeight.w700, color: kuInfo)),
+                    style: t.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, color: kuInfo)),
               ],
             ),
           ),
@@ -240,7 +253,8 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
                 'end': widget.args.end,
                 'price': widget.args.price,
               }),
-              child: const Text('KU대리 진행하기', style: TextStyle(color: Colors.white)),
+              child: const Text('KU대리 진행하기',
+                  style: TextStyle(color: Colors.white)),
             ),
           ),
         ),
@@ -256,8 +270,10 @@ class _KuDeliveryDetailScreenState extends State<KuDeliveryDetailScreen> {
         perm = await Geolocator.requestPermission();
       }
       if (await Geolocator.isLocationServiceEnabled() &&
-          (perm == LocationPermission.always || perm == LocationPermission.whileInUse)) {
-        final pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+          (perm == LocationPermission.always ||
+              perm == LocationPermission.whileInUse)) {
+        final pos = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
         my = model.LatLng(lat: pos.latitude, lng: pos.longitude);
       }
     } catch (_) {}
@@ -321,7 +337,11 @@ class _LocationCard extends StatelessWidget {
           // 헤더 라인
           Row(
             children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF121319))),
+              Text(title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                      color: Color(0xFF121319))),
               const Spacer(),
               TextButton.icon(
                 onPressed: onOpenMap,
@@ -347,7 +367,10 @@ class _LocationCard extends StatelessWidget {
           // 주소/거리 텍스트(간단 버전)
           Text(
             endName,
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF121319)),
+            style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF121319)),
           ),
           const SizedBox(height: 4),
           Text(
@@ -367,7 +390,8 @@ class _MapPlaceholder extends StatelessWidget {
     return Center(
       child: Text(
         kIsWeb ? '웹 미리보기: 지도는 모바일에서 표시됩니다.' : '지도가 여기에 표시됩니다. (임시 비활성화)',
-        style: const TextStyle(color: Colors.black54, fontWeight: FontWeight.w600),
+        style:
+            const TextStyle(color: Colors.black54, fontWeight: FontWeight.w600),
         textAlign: TextAlign.center,
       ),
     );

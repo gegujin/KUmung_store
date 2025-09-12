@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kumeong_store/core/widgets/app_bottom_nav.dart';
-import 'package:kumeong_store/features/delivery/delivery_status_screen.dart'; // DeliveryStatusArgs, kuInfo
+import 'package:kumeong_store/features/delivery/delivery_status_screen.dart';
 import 'package:kumeong_store/models/latlng.dart' as model;
-import 'package:kumeong_store/features/home/review_screen.dart'; // ReviewPage
+import 'package:kumeong_store/features/home/review_screen.dart';
 
 class BuyPage extends StatelessWidget {
   const BuyPage({super.key});
@@ -27,10 +27,8 @@ class BuyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
-    // 데모 데이터
     final List<Map<String, dynamic>> purchases = [
       {
-        // ✅ 무선 이어폰: KU대리 + 배달 진행 중 → 배달 현황 보기(kuInfo 색)
         "item": "무선 이어폰",
         "date": "2025-08-01",
         "price": "₩89,000",
@@ -53,7 +51,6 @@ class BuyPage extends StatelessWidget {
         ],
       },
       {
-        // ✅ 노트북 파우치: 직접거래로 변경(버튼 없음)
         "item": "노트북 파우치",
         "date": "2025-07-20",
         "price": "₩25,000",
@@ -61,7 +58,6 @@ class BuyPage extends StatelessWidget {
         "imageUrl": null,
       },
       {
-        // ✅ 책상용 스탠드: KU대리 + 배달 완료 → 리뷰 작성하기 버튼
         "item": "책상용 스탠드",
         "date": "2025-07-05",
         "price": "₩45,000",
@@ -159,8 +155,7 @@ class BuyPage extends StatelessWidget {
                                   RichText(
                                     text: TextSpan(
                                       style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black87),
+                                          fontSize: 14, color: Colors.black87),
                                       children: [
                                         const TextSpan(
                                           text: '합계: ',
@@ -182,18 +177,39 @@ class BuyPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
 
-                        // 태그
-                        Wrap(
-                          spacing: 6,
+                        // 태그 + 상태 텍스트
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _pill(
-                              label: method,
-                              bg: isKuDelivery
-                                  ? const Color(0xFFEFF6FF)
-                                  : const Color(0xFFE8F5E9),
-                              fg: isKuDelivery
-                                  ? const Color(0xFF1E88E5)
-                                  : const Color(0xFF2E7D32),
+                            Wrap(
+                              spacing: 6,
+                              children: [
+                                _pill(
+                                  label: method,
+                                  bg: isKuDelivery
+                                      ? const Color(0xFFEFF6FF)
+                                      : const Color(0xFFE8F5E9),
+                                  fg: isKuDelivery
+                                      ? const Color(0xFF1E88E5)
+                                      : const Color(0xFF2E7D32),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              _getStatusText(isKuDelivery, isInProgress,
+                                  isCompleted, method),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: isKuDelivery
+                                    ? (isInProgress
+                                        ? Colors.orange
+                                        : Colors.green)
+                                    : (method == '직접거래'
+                                        ? Colors.blueGrey
+                                        : Colors.black54),
+                              ),
                             ),
                           ],
                         ),
@@ -201,7 +217,6 @@ class BuyPage extends StatelessWidget {
 
                         // 버튼 영역
                         if (isKuDelivery && isInProgress) ...[
-                          // ✅ 배달 현황 보기: kuInfo 컬러 적용
                           SizedBox(
                             width: double.infinity,
                             height: 48,
@@ -218,8 +233,7 @@ class BuyPage extends StatelessWidget {
                                   orderId:
                                       (item['orderId'] as String?) ?? 'UNKNOWN',
                                   categoryName:
-                                      (item['categoryName'] as String?) ??
-                                          '기타',
+                                      (item['categoryName'] as String?) ?? '기타',
                                   productTitle:
                                       (item['productTitle'] as String?) ??
                                           (item['item'] as String? ?? '상품'),
@@ -232,16 +246,13 @@ class BuyPage extends StatelessWidget {
                                   etaMinutes:
                                       (item['etaMinutes'] as int?) ?? 15,
                                   moveTypeText:
-                                      (item['moveTypeText'] as String?) ??
-                                          '도보',
-                                  startCoord:
-                                      (item['startCoord'] as model.LatLng?) ??
-                                          model.LatLng(
-                                              lat: 37.5400, lng: 127.0700),
-                                  endCoord:
-                                      (item['endCoord'] as model.LatLng?) ??
-                                          model.LatLng(
-                                              lat: 37.5410, lng: 127.0720),
+                                      (item['moveTypeText'] as String?) ?? '도보',
+                                  startCoord: (item['startCoord']
+                                          as model.LatLng?) ??
+                                      model.LatLng(lat: 37.5400, lng: 127.0700),
+                                  endCoord: (item['endCoord']
+                                          as model.LatLng?) ??
+                                      model.LatLng(lat: 37.5410, lng: 127.0720),
                                   route: item['route'] as List<model.LatLng>?,
                                 );
                                 context.pushNamed('delivery-status',
@@ -257,7 +268,6 @@ class BuyPage extends StatelessWidget {
                             ),
                           ),
                         ] else if (isKuDelivery && isCompleted) ...[
-                          // ✅ 배달 완료: 리뷰 작성하기
                           SizedBox(
                             width: double.infinity,
                             height: 48,
@@ -311,5 +321,17 @@ class BuyPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // 상태 텍스트 반환
+  String _getStatusText(
+      bool isKuDelivery, bool isInProgress, bool isCompleted, String method) {
+    if (isKuDelivery) {
+      if (isInProgress) return '배달 중';
+      if (isCompleted) return '배달 완료';
+      return '대기 중';
+    } else {
+      return '거래 중'; // 직접거래 기본 상태
+    }
   }
 }
