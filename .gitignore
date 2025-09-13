@@ -54,3 +54,5 @@ mysql_data/
 .vscode/
 android_old/
 node_modules
+
+kumeong-api/
