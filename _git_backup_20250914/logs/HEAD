@@ -1,0 +1,28 @@
+0000000000000000000000000000000000000000 39c5bbd32d48bdda44096b67b74153989f2f71e2 gegujin <gegujin7371@naver.com> 1755595518 +0900	commit (initial): chore: initial commit with proper ignores
+39c5bbd32d48bdda44096b67b74153989f2f71e2 0000000000000000000000000000000000000000 gegujin <gegujin7371@naver.com> 1755595527 +0900	Branch: renamed refs/heads/main to refs/heads/main
+39c5bbd32d48bdda44096b67b74153989f2f71e2 39c5bbd32d48bdda44096b67b74153989f2f71e2 gegujin <gegujin7371@naver.com> 1755595527 +0900	Branch: renamed refs/heads/main to refs/heads/main
+39c5bbd32d48bdda44096b67b74153989f2f71e2 a4620ce670e92a1bc9ede0faa49352413636c687 gegujin <gegujin7371@naver.com> 1756892504 +0900	pull --tags origin main: Fast-forward
+a4620ce670e92a1bc9ede0faa49352413636c687 c962e6ced5d66396731c3b3a56cb9fae93940509 gegujin <gegujin7371@naver.com> 1756892621 +0900	pull --tags origin main: Fast-forward
+c962e6ced5d66396731c3b3a56cb9fae93940509 c4c3c653d5c6b68508f53046273769db7ae9d6ed gegujin <gegujin7371@naver.com> 1756893672 +0900	commit: feat: 주석 삭제
+c4c3c653d5c6b68508f53046273769db7ae9d6ed 56c313b2cb4dc310135b262ded300b79d22275b1 gegujin <gegujin7371@naver.com> 1756893681 +0900	pull --tags origin main: Merge made by the 'ort' strategy.
+56c313b2cb4dc310135b262ded300b79d22275b1 f5056b9b85bffd02064ffb74b7a5d87ba993c09c gegujin <gegujin7371@naver.com> 1756979628 +0900	commit: feat(nav): 공용 AppBottomNav 4탭(홈/채팅/관심목록/마이페이지) 도입 및 HomePage 적용
+f5056b9b85bffd02064ffb74b7a5d87ba993c09c 2ccb09e70758591879ae8dd38e03b1d238a807b0 gegujin <gegujin7371@naver.com> 1757160350 +0900	pull --tags origin main: Fast-forward
+2ccb09e70758591879ae8dd38e03b1d238a807b0 7c5d95475b82b70be42ee655c1ffbef643ea4b2b gegujin <gegujin7371@naver.com> 1757168526 +0900	commit: feat : 하단바 수정완료(GoRouter 수정)
+7c5d95475b82b70be42ee655c1ffbef643ea4b2b 4e2ff679a38f5839dd5432d60d63b27e95cbdd8d gegujin <gegujin7371@naver.com> 1757239286 +0900	commit: feat : home – FAB 2개 제거하고 오버레이 세로 메뉴(상품등록/KU대리) 추가, 바깥탭·X로 닫기, AppBar 옵션 정리
+4e2ff679a38f5839dd5432d60d63b27e95cbdd8d c91c6b81c74954728ad9f225b1e5e5b55b7b2399 gegujin <gegujin7371@naver.com> 1757250285 +0900	commit: feat : home 주석 삭제
+c91c6b81c74954728ad9f225b1e5e5b55b7b2399 44f34258a0871c1e1aa327272451ae4948f2d411 gegujin <gegujin7371@naver.com> 1757250616 +0900	commit (merge): Merge origin/main into main: resolve conflicts in mypage/settings; add delivery & settings screens
+44f34258a0871c1e1aa327272451ae4948f2d411 923b5b17200d99d7a0a30de7c8bd43c61f648c24 gegujin <gegujin7371@naver.com> 1757250767 +0900	commit (merge): Merge origin/main: resolve conflicts (prefer ours) in home/mypage/settings
+923b5b17200d99d7a0a30de7c8bd43c61f648c24 4b83bdc9b936ef3d65445151b83d20ece341346d gegujin <gegujin7371@naver.com> 1757251040 +0900	pull --tags origin main: Fast-forward
+4b83bdc9b936ef3d65445151b83d20ece341346d 9a01373768b494af13313970d1aa72f2f9091adf gegujin <gegujin7371@naver.com> 1757251320 +0900	commit: fix(settings): rename SettingsPage -> SettingsScreen and unify references
+9a01373768b494af13313970d1aa72f2f9091adf 44bab914410f1378f51c38db3a5267050ae2471d gegujin <gegujin7371@naver.com> 1757253301 +0900	commit: feat : 서브페이지에서 루트페이지로 이동할 수 있게 수정(충돌이 나서 수정함)
+44bab914410f1378f51c38db3a5267050ae2471d 3ab0ffe0e902174c3bc4b8c4f3b2df60ee3daf81 gegujin <gegujin7371@naver.com> 1757253324 +0900	commit: feat : 충돌이 나서 수정함
+3ab0ffe0e902174c3bc4b8c4f3b2df60ee3daf81 bf0180d59a8a50a9b7f32b15ed0f84b8bf17c69b gegujin <gegujin7371@naver.com> 1757254684 +0900	pull --tags origin main: Fast-forward
+bf0180d59a8a50a9b7f32b15ed0f84b8bf17c69b 4ea063e1204e45e8d4e8ded1da229665c73bf134 gegujin <gegujin7371@naver.com> 1757314125 +0900	pull --tags origin main: Fast-forward
+4ea063e1204e45e8d4e8ded1da229665c73bf134 f6db987687ab284e02bddccba57e4ea6ba7ad418 gegujin <gegujin7371@naver.com> 1757337578 +0900	commit: feat : hero 오류로 인한 라우터 수정으로 인해 전반적인 수정
+f6db987687ab284e02bddccba57e4ea6ba7ad418 501c4289ee4a31216019843638f9f4e737b425b6 gegujin <gegujin7371@naver.com> 1757344176 +0900	commit: feat : 라우터 누락사항 추가
+501c4289ee4a31216019843638f9f4e737b425b6 10ae3da52c4d94a813c1eb52526392edb968d539 gegujin <gegujin7371@naver.com> 1757347041 +0900	commit: feat : 찜 목록 수정과 디테일 수정(하트활성화)
+10ae3da52c4d94a813c1eb52526392edb968d539 1932e523d4dac8309e67a1440e66f9987eced148 gegujin <gegujin7371@naver.com> 1757592587 +0900	commit: feat : 라우터 수정
+1932e523d4dac8309e67a1440e66f9987eced148 10734cd44b4d8f9f55134424aea06107b24e979e gegujin <gegujin7371@naver.com> 1757599847 +0900	commit: feat(nav,delivery): 홈/카테고리 하단바 정리 및 KU대리 네비게이션 수정
+10734cd44b4d8f9f55134424aea06107b24e979e 7dbb2b477a79f30f0bbcb98cee409bb89682cc7a gegujin <gegujin7371@naver.com> 1757675347 +0900	pull --tags origin main: Fast-forward
+7dbb2b477a79f30f0bbcb98cee409bb89682cc7a 137084ed1a4d5d57c3fffd72d36a612784370773 gegujin <gegujin7371@naver.com> 1757681810 +0900	commit: feat : 설정페이지 라우터 수정
+137084ed1a4d5d57c3fffd72d36a612784370773 23d788ba2e7f2609e7850a590c1ed36aa5a76bdc gegujin <gegujin7371@naver.com> 1757758628 +0900	commit: chore: normalize line endings to LF
