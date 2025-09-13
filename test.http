@@ -1,0 +1,46 @@
+@host = http://localhost:3000
+@base = {{host}}/api/v1
+
+### 1) 회원가입
+# @name register
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "student@kku.ac.kr",
+  "name": "KKU Student",
+  "password": "password1234"
+}
+
+### 2) 로그인 (토큰 자동 저장)
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "student@kku.ac.kr",
+  "password": "password1234"
+}
+
+> {%
+  // 로그인 응답에서 accessToken만 전역 변수로 저장
+  const data = JSON.parse(response.body);
+  client.global.set("access_token", data.accessToken);
+%}
+
+### 3) 내 정보 (자동 저장된 토큰 사용)
+GET {{base}}/auth/me
+Authorization: Bearer {{access_token}}
+
+### 4) (보호됨) 상품 생성
+POST {{base}}/products
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "title": "캠퍼스 패딩",
+  "price": 30000
+}
+
+### 5) (공개) 상품 목록
+GET {{base}}/products
