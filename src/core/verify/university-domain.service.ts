@@ -1,21 +1,18 @@
-// src/core/verify/university-domain.service.ts
 import { Injectable } from '@nestjs/common';
-import { isAcademic } from 'swot-node'; // true if *.edu / *.ac.kr 등 학술 기관
+import { isAcademic } from 'swot-node'; // *.edu, *.ac.kr 등 학술 도메인 판별
+
+type Reason = 'NO_DOMAIN' | 'NOT_ACADEMIC_DOMAIN';
 
 @Injectable()
 export class UniversityDomainService {
   async isUniversityEmail(email: string, expectedUnivName?: string) {
     const domain = email.split('@')[1]?.toLowerCase();
-    if (!domain) return { ok: false, reason: 'NO_DOMAIN' };
-    const academic = isAcademic(email);
-    if (!academic) return { ok: false, reason: 'NOT_ACADEMIC_DOMAIN' };
-    // 선택: 학교명 매칭(간단 버전 — 실서비스는 매핑 테이블을 권장)
-    if (expectedUnivName) {
-      const norm = (s: string) => s.replace(/\s+/g, '').toLowerCase();
-      if (!norm(domain).includes('ac.kr') && !norm(domain).includes('edu')) {
-        // 해외/비표준 예외는 별도 화이트리스트로
-      }
-    }
-    return { ok: true };
+    if (!domain) return { ok: false, reason: 'NO_DOMAIN' as Reason };
+
+    const academic = isAcademic(email); // 도메인만 줘도 동작
+    if (!academic) return { ok: false, reason: 'NOT_ACADEMIC_DOMAIN' as Reason };
+
+    // (선택) expectedUnivName 매칭이 필요하면 여기에 로직 추가
+    return { ok: true as const };
   }
 }
